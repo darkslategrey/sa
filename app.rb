@@ -1,18 +1,15 @@
 
 ENV['RAILS_ENV'] = 'production'
 
+require './lib/db_connect'
 require './models/calendar'
+require 'active_support'
+
 require 'yaml'
 require 'haml'
+require 'json'
+
 require 'pp'
-require 'sequel'
-
-
-DB_JE = Sequel.connect 'mysql://root:admin@localhost:3306/jobenfance',
-                       :max_connections => 10, :logger => 'log/je.log'
-DB_JD = Sequel.connect 'mysql://root:admin@localhost:3306/jobdependance',
-                       :max_connections => 10, :logger => 'log/jd.log'
-
 
 class AxAgenda < Sinatra::Base
 
@@ -21,8 +18,8 @@ class AxAgenda < Sinatra::Base
   end
 
   get '/calendars' do
-    calendars = [ Calendar.using(:je).first.as_ax ]
-    calendars << Calendar.using(:jd).first.as_ax
+    calendars = []
+    calendars = [:je, :jd].map do |srv| Calendar.server(srv).first.as_ax end
     { :calendars => calendars }.to_json
   end
   
