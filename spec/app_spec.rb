@@ -16,6 +16,7 @@ describe "Axagenda App" do
   it "should return the je/jd calendars" do
     get '/calendars'
     calendars = JSON.parse last_response.body
+    pp calendars
     assert_equal 2, calendars.size
   end
   

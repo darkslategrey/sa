@@ -1,4 +1,5 @@
 
+ENV['RAILS_ENV'] = 'production'
 
 require 'active_record'
 require 'octopus'
@@ -9,7 +10,7 @@ require 'haml'
 require 'pp'
 
 config_db = YAML.load(File.open('./config/databases.yml', 'r'))
-ActiveRecord::Base.establish_connection config_db['je']
+ActiveRecord::Base.establish_connection config_db['production']
 
 
 
@@ -20,9 +21,9 @@ class AxAgenda < Sinatra::Base
   end
 
   get '/calendars' do
-    calendars = [ Calendar.using(:je).first.as_json ]
-    calendars << Calendar.using(:jd).first.as_json
-    calendars.to_json
+    calendars = [ Calendar.using(:je).first.as_ax ]
+    calendars << Calendar.using(:jd).first.as_ax
+    { :calendars => calendars }.to_json
   end
   
 end

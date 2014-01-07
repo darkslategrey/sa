@@ -1,7 +1,9 @@
 
 
 octopus:
-  shards:
+  environments:
+    - production
+  production:
     je:
       adapter: mysql2
       host: localhost
