@@ -1,6 +1,6 @@
 
 
-require 'active_record'
+require 'sequel'
 
 task :default => :test
 

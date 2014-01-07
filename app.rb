@@ -1,17 +1,17 @@
 
 ENV['RAILS_ENV'] = 'production'
 
-require 'active_record'
-require 'octopus'
 require './models/calendar'
 require 'yaml'
 require 'haml'
-
 require 'pp'
+require 'sequel'
 
-config_db = YAML.load(File.open('./config/databases.yml', 'r'))
-ActiveRecord::Base.establish_connection config_db['production']
 
+DB_JE = Sequel.connect 'mysql://root:admin@localhost:3306/jobenfance',
+                       :max_connections => 10, :logger => 'log/je.log'
+DB_JD = Sequel.connect 'mysql://root:admin@localhost:3306/jobdependance',
+                       :max_connections => 10, :logger => 'log/jd.log'
 
 
 class AxAgenda < Sinatra::Base

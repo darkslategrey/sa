@@ -1,11 +1,16 @@
-class CreateAxAgendaTable < ActiveRecord::Migration
-  using(:master, :je, :jd)
-  def change
-    create_table :ax_agendas do |t|
-      t.string :name
-      t.string :title
-      t.integer :color
-      t.timestamps
+
+Sequel.migration do
+  up do
+    create_table :ax_agendas do
+      primary_key :id
+      String  :name
+      String  :title
+      Integer :color
     end
   end
+
+  down do
+    drop_table :ax_agendas
+  end
 end
+
