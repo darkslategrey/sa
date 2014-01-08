@@ -6,11 +6,12 @@ require 'pry'
 namespace :ax do
 
   task :run do
-    exec "rerun --dir models,views,public -- rackup --port 4000 config.ru"
+    exec "rerun -b --dir models,views,public -- rackup --port 4000 config.ru"
   end
 
   task :console do
-    Pry.config.requires = ['./lib/db_connect', './models/calendar']
+    models = Dir['models/*.rb'].map do |m| "./#{m}" end
+    Pry.config.requires = ['./lib/db_connect'] + models
     Pry.config.pager = false
     Pry.start
   end

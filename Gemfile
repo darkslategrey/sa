@@ -9,7 +9,7 @@ gem "sequel"
 
 group :test do
   gem "rack-test", :require => "rack/test"
-  # gem "minitest"
+  gem "minitest", '~> 5.2.1'
 end
 
 

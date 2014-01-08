@@ -17,10 +17,12 @@ class AxAgenda < Sinatra::Base
     haml :index
   end
 
+
+# {"id":"","cid":"1","title":"fdkljfdklsjkl","start":,"end":"2014-01-07T01:00:00+01:00","loc":"","notes":"","url":"","ad":false,"rem":"","rrule":"","duration":60,"origid":"","rsstart":"","ristart":"2014-01-07T00:00:00+01:00","redit":""}  
   # startDate=2013-12-29&endDate=2014-02-01&page=1&start=0&limit=25 
   get '/events' do
-    # events = [:je, :jd].map do |srv| Action.server(srv).ax_find params end
-    '{}'
+    events = Action.ax_find params, [:je, :jd]
+    { :events => events }.to_json 
   end
   
   get '/calendars' do

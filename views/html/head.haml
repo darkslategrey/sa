@@ -3,15 +3,16 @@
     Ax Agenda
   %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=utf8'}
   = haml :'html/html5'
+  // Style sheets.
+  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/js/extjs/resources/css/ext-all.css'}
+  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/js/calendar/resources/css/extensible-all.css'}    
   // Javascripts.
-  %script{:type => 'text/javascript', :src => '/js/calendar/Extensible-config.js'}
   %script{:type => 'text/javascript', :src => '/js/extjs/ext-all.js'}
   %script{:type => 'text/javascript', :src => '/js/calendar/lib/extensible-all-debug.js'}
-  %script{:type => 'text/javascript', :src => '/js/calendar/App.js'}
-  // = js :application
-  // Style sheets.
-  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/js/extjs/resources/css/ext-all-debug.css'}
-  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/css/test-app.css'}
-  // = css :application, media: 'screen'
-
+  // locale
+  %script{:type => 'text/javascript', :src => '/js/extjs/locale/ext-lang-fr.js' }
+  %script{:type => 'text/javascript', :src => '/js/calendar/locale/extensible-lang-fr.js' }
+  
+  %script{:type => 'text/javascript', :src => '/js/calendar/Axagenda.js'}
+  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/css/axagenda.css'}
 
