@@ -6,6 +6,7 @@ gem "haml"
 gem "pry"
 gem "yard"
 gem "sequel"
+gem "activesupport"
 
 group :test do
   gem "rack-test", :require => "rack/test"

@@ -1,4 +1,5 @@
 
+require 'active_support/all'
 
 class Action < Sequel::Model
   set_dataset :llx_actioncomm
@@ -28,9 +29,26 @@ class Action < Sequel::Model
     #           "limit"=>"25"}
   
   def self.ax_find params, srvs
+    startDate = DateTime.parse params['startDate']
+    endDate   = DateTime.parse params['endDate']    
+    endDate   = endDate == startDate ? startDate + 1.day : endDate
     actions = srvs.map do |srv|
-      self.server(srv)
+      self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}'").all
+    end
+    actions.flatten.map do |action|
+      action.to_ax
     end
   end
-  
+
+
+  def to_ax
+    {
+      "id"    => id,
+      "cid"   => calendar.id,
+      "title" => "#{id} / #{label}",
+      "start" => DateTime.parse(datep.to_s).to_s,
+      "end"   => DateTime.parse(datep2.to_s).to_s,
+      "notes" => note
+    }
+  end
 end
