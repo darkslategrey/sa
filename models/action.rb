@@ -33,7 +33,7 @@ class Action < Sequel::Model
     endDate   = DateTime.parse params['endDate']    
     endDate   = endDate == startDate ? startDate + 1.day : endDate
     actions = srvs.map do |srv|
-      self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}'").all
+      self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}'").order(:datep).all
     end
     actions.flatten.map do |action|
       action.to_ax
