@@ -6,7 +6,7 @@ require 'pry'
 namespace :ax do
 
   task :run do
-    exec "rerun -b --dir models,views,public -- rackup --port 4000 config.ru"
+    exec "rerun -b --dir .,models,views,public -- rackup --port 4000 config.ru"
   end
 
   task :console do
