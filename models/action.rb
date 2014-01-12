@@ -1,7 +1,11 @@
+$:.unshift File.dirname(__FILE__) + "/../lib"
 
 require 'active_support/all'
+require 'ax_logger'
 
 class Action < Sequel::Model
+  include ::Axagenda::Logging
+  
   set_dataset :llx_actioncomm
 
   many_to_one :calendar, :key => :ax_agenda_id
@@ -33,7 +37,7 @@ class Action < Sequel::Model
     endDate   = DateTime.parse params['endDate']    
     endDate   = endDate == startDate ? startDate + 1.day : endDate
     actions = srvs.map do |srv|
-      self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}'").order(:datep).all
+      self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}' and ax_agenda_id != 0").order(:datep).all
     end
     actions.flatten.map do |action|
       action.to_ax

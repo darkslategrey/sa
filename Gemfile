@@ -10,11 +10,14 @@ gem "activesupport"
 
 group :test do
   gem "rack-test", :require => "rack/test"
-  gem "minitest", '~> 5.2.1'
+  # gem "minitest" #, '~> 5.2.1'
+  gem 'jasmine'
 end
 
 
 group :development do
+  gem 'thin'
+  gem 'shotgun'
   gem 'rerun'
 end
 

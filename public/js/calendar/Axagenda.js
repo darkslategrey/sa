@@ -6,38 +6,38 @@
  */
 Ext.Loader.setConfig({
     enabled: true,
-    //disableCaching: false,
+    disableCaching: false,
     paths: {
 	"Axagenda": "/js/calendar/axagenda"
-        // "Extensible": "../../../src",
-        // "Extensible.example.calendar": "/js/calendar/examples"
     }
 });
 
 
-Ext.define('AxAgenda.App', {
+Ext.define('AxAgenda', {
     
     requires: [
         'Ext.container.Viewport',
         'Ext.layout.container.Border',
         'Extensible.calendar.CalendarPanel',
-        'Extensible.calendar.gadget.CalendarListPanel'
-        // 'Extensible.calendar.data.MemoryCalendarStore',
-        // 'Extensible.calendar.data.MemoryEventStore',
-        // 'Extensible.example.calendar.data.Events'
-        // 'Extensible.example.calendar.data.Calendars'
+        'Extensible.calendar.gadget.CalendarListPanel',
+	'Axagenda.gadget.CalendarListPanel',
+	'Axagenda.gadget.UserListCombo'	
     ],
     
     constructor : function() {
-        var startDay = 0; // The 0-based index for the day on which the calendar week begins (0=Sunday)
-
-        // This is an example calendar store that enables event color-coding
-        // this.calendarStore = Ext.create('Extensible.calendar.data.MemoryCalendarStore', {
-        //     // defined in ../data/Calendars.js
-        //     data: Ext.create('Extensible.example.calendar.data.Calendars')
-        // });
+        var startDay = 0; // (0=Sunday)
 
 	this.calendarStore = Ext.create('Axagenda.data.CalendarStore', {});
+
+	this.userStoreJe = Ext.create('Axagenda.data.UserStore');
+	this.userStoreJe.load({
+	    params: { agenda: 'je' }
+	});
+	this.userStoreJd = Ext.create('Axagenda.data.UserStore');
+	this.userStoreJd.load({
+	    params: { agenda: 'jd' }
+	});
+	
 	this.eventStore = Ext.create('Extensible.calendar.data.EventStore', {
             autoLoad: true,
             proxy: {
@@ -52,17 +52,35 @@ Ext.define('AxAgenda.App', {
 		}
             }
 	});
-	
-	// this.eventStore    = Ext.create('Axagenda.data.EventStore', {
-	//     autoLoad: true,
-	//     autoMsg: false
-	// });
 
+	var subDatePickerContainer = Ext.create('Ext.panel.Panel', {
+	    layout: 'vbox',
+	    items: [
+		{
+                    xtype: 'axagenda.calendarlist',
+                    store: this.calendarStore,
+                    border: false,
+                    width: 178
+                }, {
+		    xtype: 'label',
+		    text: 'Utilisateurs Jobenfance'
+		}, {
+		    xtype: 'axagenda.userlist',
+		    store: this.userStoreJe,
+		    border: false
+		    // queryMode: 'remote'
+		}, {
+		    xtype: 'label',
+		    text: 'Utilisateurs Jobdependance'
+		}, {
+		    xtype: 'axagenda.userlist',
+		    store: this.userStoreJd,
+		    border: false		    
+		    // queryMode: 'remote'
+		}
+	    ]
+	});
         
-        // This is the app UI layout code.  All of the calendar views are subcomponents of
-        // CalendarPanel, but the app title bar and sidebar/navigation calendar are separate
-        // pieces that are composed in app-specific layout code since they could be omitted
-        // or placed elsewhere within the application.
         Ext.create('Ext.Viewport', {
             layout: 'border',
             renderTo: 'calendar-ct',
@@ -100,16 +118,12 @@ Ext.define('AxAgenda.App', {
                                 scope: this
                             }
                         }
-                    },{
-                        xtype: 'extensible.calendarlist',
-                        store: this.calendarStore,
-                        border: false,
-                        width: 178
-                    }]
+                    }, subDatePickerContainer ]
                 },{
                     xtype: 'extensible.calendarpanel',
                     eventStore: this.eventStore,
                     calendarStore: this.calendarStore,
+		    // userStore: this.userStore,
                     border: false,
                     id:'app-calendar',
                     region: 'center',
@@ -274,7 +288,7 @@ Ext.define('AxAgenda.App', {
         rec.commit();
         
         this.showMsg('Event '+ rec.data[mappings.Title.name] +' was ' + action + ' to '+
-            Ext.Date.format(rec.data[mappings.StartDate.name], ('F jS'+time)));
+		     Ext.Date.format(rec.data[mappings.StartDate.name], ('F jS'+time)));
     },
     
     // This is an application-specific way to communicate CalendarPanel event messages back to the user.
@@ -289,8 +303,8 @@ Ext.define('AxAgenda.App', {
     }
 });
 
-
+var Application = null;
 Ext.onReady(function() {
-    Ext.create('AxAgenda.App');
+    Application = Ext.create('AxAgenda');
 });
 

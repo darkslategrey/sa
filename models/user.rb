@@ -5,6 +5,8 @@ class Group < Sequel::Model
 
   many_to_many :users, :left_key => :fk_usergroup, :right_key => :fk_user,
                :join_table => :llx_usergroup_user
+
+
 end
 
 class User < Sequel::Model
@@ -23,4 +25,19 @@ class User < Sequel::Model
     todo.size   > 0 and return true
     return false
   end
+
+
+  def to_ax
+    {
+      :nom => "#{firstname} #{name}",
+      :id  => rowid
+    }
+  end
+
+  
+  # def self.ax_find params, dbs
+  #   [{:nom => 'greg', :id => '}]
+  # end
+
+  
 end

@@ -6,7 +6,8 @@ servers[:je] = {:database => 'jobenfance'}
 
 DB = Sequel.connect 'mysql2://root:admin@localhost:3306/master_doli',
                     :max_connections => 10, :servers => servers
-DB.extension :server_block    
+DB.extension :server_block
+DB.extension :arbitrary_servers
 Sequel::Model.plugin :sharding
 Sequel::Model.plugin :json_serializer
 
