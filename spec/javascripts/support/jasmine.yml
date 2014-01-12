@@ -11,18 +11,7 @@
 #   - dist/**/*.js
 #
 src_files:
-
-  - /public/js/extjs/ext-all.js
-  - /public/js/calendar/Axagenda-test.js    
-  - /public/js/calendar/lib/*.js
-  - /public/js/calendar/axagenda/gadget/CalendarListPanel.js
-  - /public/js/calendar/axagenda/gadget/UserListCombo.js
-  - /public/js/calendar/axagenda/data/UserModel.js
-  - /public/js/calendar/axagenda/data/UserStore.js
-  - /public/js/calendar/axagenda/data/EventStore.js
-  - /public/js/calendar/axagenda/data/CalendarStore.js
-
-
+    - public/javascripts/**/*.js
 
 # stylesheets
 #
@@ -36,10 +25,6 @@ src_files:
 #   - stylesheets/*.css
 #
 stylesheets:
-  - /public/js/extjs/resources/css/ext-all.css
-  - /public/js/calendar/resources/css/extensible-all.css
-  - /public/css/*.css
-
 
 # helpers
 #
@@ -53,10 +38,9 @@ stylesheets:
 #
 helpers:
   - 'helpers/**/*.js'
-
 # spec_files
 #
-# Return an array of filepaths relative to spec_dir to include.
+#  Return an array of filepaths relative to spec_dir to include.
 # Default: ["**/*[sS]pec.js"]
 #
 # EXAMPLE:
@@ -93,34 +77,12 @@ spec_dir:
 #
 # Ruby file that Jasmine server will require before starting.
 # Returned relative to your root path
-# Default spec/javascripts/support/jasmine_helper.rb
+# Default spec/support/jasmine_helper.rb
 #
 # EXAMPLE:
 #
-# spec_helper: spec/javascripts/support/jasmine_helper.rb
+# spec_helper: spec/support/jasmine_helper.rb
 #
-spec_helper: spec/javascripts/support/jasmine_helper.rb
+spec_helper: spec/support/jasmine_helper.rb
 
-# boot_dir
-#
-# Boot directory path. Your boot_files must be returned relative to this path.
-# Default: Built in boot file
-#
-# EXAMPLE:
-#
-# boot_dir: spec/javascripts/support/boot
-#
-boot_dir:
-
-# boot_files
-#
-# Return an array of filepaths relative to boot_dir to include in order to boot Jasmine
-# Default: Built in boot file
-#
-# EXAMPLE
-#
-# boot_files:
-#   - '**/*.js'
-#
-boot_files:
 

@@ -11,7 +11,7 @@ gem "activesupport"
 group :test do
   gem "rack-test", :require => "rack/test"
   # gem "minitest" #, '~> 5.2.1'
-  gem 'jasmine'
+  gem 'jasmine', '~> 1.3.2'
 end
 
 
