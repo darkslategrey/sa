@@ -30,7 +30,8 @@ class User < Sequel::Model
   def to_ax
     {
       :nom => "#{firstname} #{name}",
-      :id  => rowid
+      :id  => rowid,
+      :selected => true
     }
   end
 

@@ -18,8 +18,8 @@ class AxAgenda < Sinatra::Base
 
   get '/' do
     haml :index
+    # haml :remote, :layout => :remote_layout    
   end
-
 
   get '/users' do
     db = params['agenda']        

@@ -1,0 +1,12 @@
+%div{style: 'visibility:hidden;'}
+  #sample-overview
+    %h1 remote
+    %p Un sample
+    %p#errChk
+      %label{:for => "forceError"}
+        %input#forceError{:type => "checkbox", :name => "forceError"}
+        Simulate server errors
+          
+    %p.view-src
+      %a{:target => "_blank", :href => 'js/app/app.js'}
+        View Source
