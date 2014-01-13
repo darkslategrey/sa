@@ -40,12 +40,28 @@ class AxAgenda < Sinatra::Base
     logger.info("events size #{events.size}")
     { :events => events, :success => true }.to_json 
   end
+
+  post '/events' do
+    # all_day: false
+    # cid: "1"
+    # end: "2014-01-06T01:00:00+01:00"
+    # id: ""
+    # location: ""
+    # notes: ""
+    # reminder: ""
+    # start: "2014-01-06T00:00:00+01:00"
+    # title: "fdsfds"
+    # url: ""
+  end 
   
   get '/calendars' do
     calendars = [:je, :jd].map do |srv| Calendar.server(srv).first.as_ax end
     { :calendars => calendars, :success => true }.to_json
   end
-  
+
+  # not yet
+  post '/calendars' do
+  end
 end
 
 

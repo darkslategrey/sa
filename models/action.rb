@@ -52,7 +52,8 @@ class Action < Sequel::Model
       "title" => "#{id} / #{label}",
       "start" => DateTime.parse(datep.to_s).to_s,
       "end"   => DateTime.parse(datep2.to_s).to_s,
-      "notes" => note
+      "notes" => note,
+      "owner" => user_todo.rowid
     }
   end
 end

@@ -3,17 +3,21 @@
     Ax Agenda
   %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=utf8'}
   = haml :'html/html5'
-  // Style sheets.
-  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/js/extjs/resources/css/ext-all.css'}
-  %link{:rel => 'stylesheet', :type => 'text/css', :href => '/js/extensible/resources/css/extensible-all.css'}    
-  // Javascripts.
-  %script{:type => 'text/javascript', :src => '/js/extjs/ext-all.js'}
-  %script{:type => 'text/javascript', :src => '/js/bootstrap.js'}
-  %script{:type => 'text/javascript', :src => '/js/extensible/lib/extensible-all-debug.js'}
-  // locale
-  %script{:type => 'text/javascript', :src => '/js/extjs/locale/ext-lang-fr.js' }
-  %script{:type => 'text/javascript', :src => '/js/extensible/locale/extensible-lang-fr.js' }
+  / Style sheets.
+  %link{:rel => 'stylesheet', :type => 'text/css', :href => 'js/extjs/resources/css/ext-all.css'}
+  %link{:rel => 'stylesheet', :type => 'text/css', :href => 'js/extensible/resources/css/extensible-all.css'}    
+  / <x-compile>
+  / <x-bootstrap>
+  %script{:type => 'text/javascript', :src => 'js/extjs/ext-all.js'}
+  / </x-bootstrap>    
+  -# %script{:type => 'text/javascript', :src => 'js/bootstrap.js'}
+  %script{:type => 'text/javascript', :src => 'js/extensible/src/Extensible.js'}
+  -# %script{:type => 'text/javascript', :src => 'js/extensible/lib/extensible-all-debug.js'}
+
+  %script{:type => 'text/javascript', :src => 'js/extjs/locale/ext-lang-fr.js' }
+  %script{:type => 'text/javascript', :src => 'js/extensible/locale/extensible-lang-fr.js' }
   
-  %script{:type => 'text/javascript', :src => '/js/app/app.js'}
+  %script{:type => 'text/javascript', :src => 'js/app/app.js'}
+  / </x-compile>      
   %link{:rel => 'stylesheet', :type => 'text/css', :href => '/css/app.css'}
 

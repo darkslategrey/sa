@@ -6,12 +6,13 @@
  */
 Ext.Loader.setConfig({
     enabled: true,
-    //disableCaching: false,
-    // paths: {
-    // 	// "AxAgenda": "js/app",
-    //     "Extensible": "./src",
-    // 	"Extensible.example": "./js"
-    // }
+    disableCaching: false,
+    paths: {
+	"AxAgenda": "js/app",
+	"Extensible": "js/extensible/src",
+	"Ext": "js/extjs/src"
+	// "Extensible.example": "./js"
+    }
 });
 
 Ext.require([
@@ -20,6 +21,8 @@ Ext.require([
     'Ext.data.proxy.Rest',
     'Extensible.calendar.data.EventStore',
     'Extensible.calendar.CalendarPanel',
+    'Extensible.calendar.gadget.CalendarListMenu',
+    'Extensible.calendar.gadget.CalendarListPanel',    
     'AxAgenda.store.Calendars',
     'AxAgenda.view.CalendarPanel',
     'AxAgenda.view.UserListPanel'
@@ -34,6 +37,16 @@ Ext.application({
 
     launch: function() {
 
+	Extensible.calendar.data.CalendarMappings = {
+	    CalendarId:   {name:'CalendarId', mapping: 'id', type: 'int'},
+	    Title:        {name:'Title', mapping: 'title', type: 'string'},
+	    Description:  {name:'Description', mapping: 'desc', type: 'string'},
+	    ColorId:      {name:'ColorId', mapping: 'color', type: 'int'},
+	    IsHidden:     {name:'IsHidden', mapping: 'hidden', type: 'boolean'},
+	};
+	Extensible.calendar.data.CalendarModel.reconfigure();
+	
+	
 	Extensible.calendar.data.EventMappings = {
             EventId:     {name: 'EventId', mapping:'id', type:'string'},
             CalendarId:  {name: 'CalendarId', mapping: 'cid', type: 'string'},
@@ -44,10 +57,22 @@ Ext.application({
             Notes:       {name: 'Notes', mapping: 'notes'},
             Url:         {name: 'Url', mapping: 'url'},
             IsAllDay:    {name: 'IsAllDay', mapping: 'all_day', type: 'boolean'},
-            Reminder:    {name: 'Reminder', mapping: 'reminder'}
+            Reminder:    {name: 'Reminder', mapping: 'reminder'},
+	    Owner:       {name: 'Owner',    mapping: 'owner'}
 	};
 	Extensible.calendar.data.EventModel.reconfigure();
 
+	var reader = new Ext.data.reader.Json({
+	    totalProperty: 'total',
+	    successProperty: 'success',
+	    root: 'calendars',
+	    messageProperty: 'message',
+	    // read the id property generically, regardless of the mapping:
+	    idProperty: Extensible.calendar.data.CalendarMappings.CalendarId.mapping  || 'id',
+	    // this is also a handy way to configure your reader's fields generically:
+	    fields: Extensible.calendar.data.CalendarModel.prototype.fields.getRange()
+	});
+	
 	var calendarStore = Ext.create('AxAgenda.store.Calendars', {
             autoLoad: true,
             proxy: {
@@ -55,10 +80,11 @@ Ext.application({
 		url: '/calendars',
 		noCache: false,
 		
-		reader: {
-                    type: 'json',
-                    root: 'calendars'
-		}
+		reader: reader
+		// {
+                //     type: 'json',
+                //     root: 'calendars'
+		// }
             }
 	});
 
