@@ -9,6 +9,7 @@ Ext.define('AxAgenda.view.UserListPanel', {
 	    renderTo: Ext.getBody(),
 	    tbar: [{
 		text: 'Tous / Aucun',
+		pressed: true,
 		enableToggle: true,
 		toggleHandler: function(button, pressed){
 		    this.items.get(0).items.each(function(checkbox){
@@ -53,12 +54,18 @@ Ext.define('AxAgenda.view.UserListPanel', {
 		boxLabel: user.nom,
 		name: this.agenda+'-users',
 		inputValue: user.id,
-		checked: user.selected
+		checked: user.selected,
+		listeners: {
+		    change: this.onChange
+		}
 	    });
 	}
 	this.add(checkboxgroup);	
     },
 
+    onChange: function(nv, ov, opts) {
+	console.log("nv <"+nv+"> ov <"+ov+"> <"+opts);
+    }
     
     // requires: [
     //     'Ext.XTemplate',
