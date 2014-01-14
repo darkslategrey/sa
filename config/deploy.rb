@@ -79,6 +79,7 @@ task :deploy => :environment do
     # invoke :'rails:assets_precompile'
 
     to :launch do
+      queue "chown -R www-data.www-data #{deploy_to}/current/"
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
   end
