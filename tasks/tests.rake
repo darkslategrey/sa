@@ -1,5 +1,5 @@
 require 'rake/testtask'
-require 'jasmine'
+
 
 Rake::TestTask.new do |t|
   t.pattern = "spec/*_spec.rb"
@@ -11,6 +11,9 @@ task :tjs do
   puts out
 end
 
-load 'jasmine/tasks/jasmine.rake'
+if ENV['RACK_ENV'] in %w/test development/
+  require 'jasmine'
+  load 'jasmine/tasks/jasmine.rake'
+end
 
 
