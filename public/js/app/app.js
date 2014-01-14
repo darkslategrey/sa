@@ -31,7 +31,7 @@ Ext.require([
 Ext.application({
 
     name: 'AxAgenda',
-    appFolder: '/js/app',
+    appFolder: 'js/app',
 
     controllers: ['Calendars'],    
 
@@ -77,7 +77,7 @@ Ext.application({
             autoLoad: true,
             proxy: {
 		type: 'ajax',
-		url: '/calendars',
+		url: 'calendars',
 		noCache: false,
 		
 		reader: reader
@@ -133,7 +133,7 @@ Ext.application({
 		pageParam: null,
 		startParam: null,
 		limitParam: null,
-		url: '/events',
+		url: 'events',
 		reader: {
                     type: 'json',
                     root: 'events'

@@ -11,7 +11,7 @@ require 'mina/rvm'    # for rvm support. (http://rvm.io)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :domain, 'deploy'
-set :deploy_to, '/var/deploy/sa'
+set :deploy_to, '/home/ks304579/public_html/sa'
 set :repository, 'git@github.com:darkslategrey/sa.git'
 set :branch, 'master'
 
@@ -80,6 +80,7 @@ task :deploy => :environment do
 
     to :launch do
       queue "chown -R www-data.www-data #{deploy_to}/current/"
+      queue "ln -s #{deploy_to}/tmp #{deploy_to}/current/tmp"
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
   end
