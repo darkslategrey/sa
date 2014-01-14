@@ -1,4 +1,5 @@
 require 'rake/testtask'
+require 'jasmine'
 
 Rake::TestTask.new do |t|
   t.pattern = "spec/*_spec.rb"
@@ -9,4 +10,7 @@ task :tjs do
   out = %x{phantomjs spec/javascripts/helpers/run-jasmine.js   http://localhost:8888}
   puts out
 end
+
+load 'jasmine/tasks/jasmine.rake'
+
 
