@@ -8,9 +8,9 @@ Ext.Loader.setConfig({
     enabled: true,
     disableCaching: false,
     paths: {
-	"AxAgenda": "js/app",
-	"Extensible": "js/extensible/src",
-	"Ext": "js/extjs/src"
+	"AxAgenda": "js/app"
+	// "Extensible": "js/extensible/src",
+	// "Ext": "js/extjs/src"
 	// "Extensible.example": "./js"
     }
 });
@@ -20,7 +20,7 @@ Ext.require([
     'Ext.layout.container.Border',
     'Ext.data.proxy.Rest',
     'Extensible.calendar.data.EventStore',
-    'Extensible.calendar.CalendarPanel',
+    'Extensible.calendar.data.CalendarModel',    
     'Extensible.calendar.gadget.CalendarListMenu',
     'Extensible.calendar.gadget.CalendarListPanel',    
     'AxAgenda.store.Calendars',
