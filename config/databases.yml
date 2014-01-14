@@ -1,18 +1,42 @@
-production:
-  adapter: mysql2
-  host: localhost
-  username: root
-  password: admin
-  pool: 10
-  database: jobenfance
-  socket: /var/run/mysqld/mysqld.sock
 
+defaults: &defaults
+    adapter: mysql2
+    host: localhost
+    username: root
+    password: admin
+    pool: 10
+    port: 3306
+    socket: /var/run/mysqld/mysqld.sock
+    
+production:
+
+  je:
+    database: new-doli-jobenfance
+    <<: *defaults
+
+  jd:
+    database: new-doli-jobdependance
+    <<: *defaults    
+
+  master:
+    database: master_doli
+    <<: *defaults    
+
+    
 development:
-  adapter: mysql2
-  host: localhost
-  username: root
-  password: admin
-  pool: 10
-  database: jobdependance
-  socket: /var/run/mysqld/mysqld.sock
+
+  je:
+    database: jobenfance
+    <<: *defaults    
+
+  jd:
+    database: jobdependance
+    <<: *defaults    
+
+  master:
+    database: master_doli
+    <<: *defaults    
+
+    
+
 
