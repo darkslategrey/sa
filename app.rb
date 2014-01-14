@@ -1,17 +1,22 @@
 
 # $:.unshift File.dirname(__FILE__) + "/../lib"
-ENV['RAILS_ENV'] = 'production'
+
+require 'yaml'
+require 'haml'
+require 'json'
+require 'sinatra'
+
+require 'pp'
+
+environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
+conf = YAML.load_file './config/databases.yml'
+$conf_env = conf[environment]
 
 require './lib/db_connect'
 require './lib/ax_logger'
 
 Dir['models/*.rb'].map do |m| require "./#{m}" end
 
-require 'yaml'
-require 'haml'
-require 'json'
-
-require 'pp'
 
 class AxAgenda < Sinatra::Base
   include Axagenda::Logging
