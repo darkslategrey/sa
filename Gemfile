@@ -7,6 +7,7 @@ gem "pry"
 gem "yard"
 gem "sequel"
 gem "activesupport"
+# gem "sprockets"
 
 group :test do
   gem "rack-test", :require => "rack/test"
@@ -19,5 +20,6 @@ group :development do
   gem 'thin'
   gem 'shotgun'
   gem 'rerun'
+  gem 'mina'
 end
 

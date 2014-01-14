@@ -30,9 +30,11 @@ task :environment do
   # If you're using rbenv, use this to load the rbenv environment.
   # Be sure to commit your .rbenv-version to your repository.
   # invoke :'rbenv:load'
-  set :rvm_path, '/usr/local/rvm/bin/rvm'
+  set :rvm_path, '/usr/local/rvm/scripts/rvm'
+
   # For those using RVM, use this to load an RVM version@gemset.
   invoke :'rvm:use[ruby-2.1.0@sa]'
+  invoke :'rvm:wrapper[ruby-2.1.0@sa,sa,bundle]'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
@@ -57,7 +59,8 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    queue "%[rake db:migrate]"
+    # queue "%[rake db:migrate]"
+
     # queue "%[rake js:minify]"
     # invoke :'rake:db_migrate'
     # invoke :'rails:assets_precompile'
