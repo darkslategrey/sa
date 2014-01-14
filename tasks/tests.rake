@@ -11,7 +11,7 @@ task :tjs do
   puts out
 end
 
-if ENV['RACK_ENV'] in %w/test development/
+if %w/test development/.include? ENV['RACK_ENV']
   require 'jasmine'
   load 'jasmine/tasks/jasmine.rake'
 end
