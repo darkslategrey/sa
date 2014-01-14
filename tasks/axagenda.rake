@@ -1,7 +1,6 @@
 
-ENV['RAILS_ENV'] = 'production'
-
 require 'pry'
+require './app'
 
 namespace :ax do
 
@@ -11,7 +10,7 @@ namespace :ax do
 
   task :console do
     models = Dir['models/*.rb'].map do |m| "./#{m}" end
-    Pry.config.requires = ['./lib/db_connect'] + models
+    Pry.config.requires = models
     Pry.config.pager = false
     Pry.start
   end
