@@ -18,8 +18,9 @@ namespace :js do
     %x(sed '/haml/d' views/html/head.haml > /tmp/head.haml; haml /tmp/head.haml public/index.html)
   end
 
-  desc "concatene"
+  desc "concatene libs"
   task :concat do
+    %x(cat public/js/extjs/ext-all-debug.js public/js/extensible/lib/extensible-all-debug.js  > public/js/app-all.js)
     # sencha compile --ignore=diag -classpath public/js/extjs/src,public/js/extensible/src,public/js/app concatenate --output-file app-all.js
     # sencha compile --ignore=diag -classpath public/js/extensible/src,public/js/extjs/src concatenate --output-file public/js/app-all.js
   end
