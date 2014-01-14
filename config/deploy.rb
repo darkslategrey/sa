@@ -13,7 +13,7 @@ require 'mina/rvm'    # for rvm support. (http://rvm.io)
 set :domain, 'deploy'
 set :deploy_to, '/var/deploy/sa'
 set :repository, 'git@github.com:darkslategrey/sa.git'
-set :branch, 'livraison_1'
+set :branch, 'master'
 
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
@@ -35,6 +35,7 @@ task :environment do
   # For those using RVM, use this to load an RVM version@gemset.
   invoke :'rvm:use[ruby-2.1.0@sa]'
   invoke :'rvm:wrapper[ruby-2.1.0@sa,sa,bundle]'
+  invoke :'rvm:wrapper[ruby-2.1.0@sa,sa,rake]'  
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
@@ -59,7 +60,7 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    # queue "%[rake db:migrate]"
+    queue "%[rake db:migrate]"
 
     # queue "%[rake js:minify]"
     # invoke :'rake:db_migrate'
