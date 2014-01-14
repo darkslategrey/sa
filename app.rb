@@ -1,6 +1,6 @@
 
 # $:.unshift File.dirname(__FILE__) + "/../lib"
-ENV['RAILS_ENV'] = 'development'
+ENV['RAILS_ENV'] = 'production'
 
 require './lib/db_connect'
 require './lib/ax_logger'
@@ -25,7 +25,7 @@ class AxAgenda < Sinatra::Base
     db = params['agenda']        
     logger.info("agenda <#{db}>")
 
-    agenda = Group.server(db).find(:nom => 'AX Agenda').first
+    agenda = Group.server(db.to_sym).find(:nom => 'AX Agenda').first
     users  = agenda.users.map do |user|
         user.to_ax
       end
