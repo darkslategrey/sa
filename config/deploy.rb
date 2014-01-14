@@ -15,10 +15,17 @@ set :deploy_to, '/var/deploy/sa'
 set :repository, 'git@github.com:darkslategrey/sa.git'
 set :branch, 'master'
 
+# set :ssh_options, "export RACK_ENV"
+# #{File.open(".env").readlines.map(&:chomp).join(" ")}}
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
 set :shared_paths, ['config/database.yml', 'log']
+
+
+# task :env do
+#   queue %[RACK_ENV="production"]
+# end
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -32,10 +39,14 @@ task :environment do
   # invoke :'rbenv:load'
   set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
+  set_default :rails_env, 'production'    
+  set_default :bundle_prefix, lambda { %{RACK_ENV="#{rails_env}" #{bundle_bin} exec} }
+  set_default :rake, lambda { %{#{bundle_prefix} rake} }
+  
   # For those using RVM, use this to load an RVM version@gemset.
   invoke :'rvm:use[ruby-2.1.0@sa]'
   invoke :'rvm:wrapper[ruby-2.1.0@sa,sa,bundle]'
-  invoke :'rvm:wrapper[ruby-2.1.0@sa,sa,rake]'  
+  invoke :'rvm:wrapper[ruby-2.1.0@sa,rake,rake]'  
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
@@ -60,10 +71,11 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    queue "%[rake db:migrate]"
+    queue! "#{rake} db:migrate"
+    # queue "%[rake db:migrate]"
 
     # queue "%[rake js:minify]"
-    # invoke :'rake:db_migrate'
+    # invoke :'rails:rake:db_migrate'
     # invoke :'rails:assets_precompile'
 
     to :launch do
