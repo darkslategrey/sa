@@ -9,7 +9,7 @@ namespace :db do
   task :environment do
     environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
     puts "Prepare env #{environment}"    
-    conf = YAML.load_file 'config/databases.yml'
+    conf = YAML.load_file 'config/database.yml'
     $conf_env = conf[environment]
     require './lib/db_connect'
   end

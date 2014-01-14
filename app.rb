@@ -9,7 +9,7 @@ require 'sinatra'
 require 'pp'
 
 environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
-conf = YAML.load_file './config/databases.yml'
+conf = YAML.load_file './config/database.yml'
 $conf_env = conf[environment]
 
 require './lib/db_connect'
