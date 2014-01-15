@@ -1,6 +1,6 @@
 
 require 'pry'
-require './app'
+
 
 namespace :ax do
 
@@ -8,7 +8,13 @@ namespace :ax do
     exec "rerun -b --dir .,models,views,public -- rackup --port 4000 config.ru"
   end
 
-  task :console do
+
+  task :environment do
+    require './app'
+  end
+  
+  desc "open a pry console"
+  task :console => :environment do
     models = Dir['models/*.rb'].map do |m| "./#{m}" end
     Pry.config.requires = models
     Pry.config.pager = false

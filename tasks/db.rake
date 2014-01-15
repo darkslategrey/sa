@@ -1,17 +1,34 @@
 
 
 require 'sequel'
+require 'yaml'
 
-Dir['models/*.rb'].map do |m| require "./#{m}" end
+environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
+puts "Prepare env #{environment}"    
+$axdbconf   = YAML.load_file 'config/database.yml'
+$conf_env = $axdbconf[environment]
+
 
 namespace :db do
-
   task :environment do
-    environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
-    puts "Prepare env #{environment}"    
-    conf = YAML.load_file 'config/database.yml'
-    $conf_env = conf[environment]
-    require './lib/db_connect'
+    begin 
+      require './lib/db_connect'
+      Dir['models/*.rb'].map do |m| require "./#{m}" end
+    rescue Exception => e
+      puts "Error while connect : #{e}"
+      if environment == 'development'
+        puts "Create dev db env"
+        %w/je jd master/.each do |db|
+          dev_adapter  = $conf_env[db]['adapter']
+          dev_port     = $conf_env[db]['port']
+          dev_host     = $conf_env[db]['host']            
+          dev_username = $conf_env[db]['username']
+          dev_pass     = $conf_env[db]['password']
+          dev_db_name  = $conf_env[db]['database']
+
+        end
+      end
+    end
   end
   
   desc "Setup the db"
@@ -19,18 +36,55 @@ namespace :db do
     puts "Setup END"
   end
 
-  desc "Migrate the db"
+  desc "setup dev db"
+  task :setup_dev => :environment do
+    puts "setup dev db START"    
+    puts "\tcreate dev dbs START"
+    %w/je jd master/.each do |db|
+      dev_adapter  = $conf_env[db]['adapter']
+      dev_port     = $conf_env[db]['port']
+      dev_host     = $conf_env[db]['host']            
+      dev_username = $conf_env[db]['username']
+      dev_pass     = $conf_env[db]['password']
+      dev_db_name  = $conf_env[db]['database']
+      prod_db_name = $axdbconf['production'][db]['database']
+
+      puts "\t\tdrop dev #{db}"
+      %x/mysqladmin -u #{dev_username} -p#{dev_pass} -f drop #{dev_db_name}/ 
+
+      puts "\t\tcreate dev #{db}"
+      %x/mysqladmin -u #{dev_username} -p#{dev_pass} create #{dev_db_name}/
+      
+      puts "\t\tdump #{db}"
+      %x[mysqldump -u #{dev_username} -p#{dev_pass} #{prod_db_name} > db/prod_#{db}.dump.sql]
+      
+      puts "\t\tload dev #{db}"
+      %x[cat db/prod_#{db}.dump.sql | mysql -u #{dev_username} -p#{dev_pass} #{dev_db_name}]
+
+      # puts "\t\tload dev seed data #{db} START"
+      # %x[ruby db/seed_dev.rb]
+      # db_url = "#{dev_adapter}://#{dev_username}:#{dev_pass}@#{dev_host}:#{dev_port}/#{dev_db_name}"
+      # %x[sequel #{db_url} db/seed_dev.rb]
+      # puts "\t\tload dev seed data #{db} END"      
+    end
+    puts "\tcreate dev dbs END"
+    puts "setup dev db END"
+    puts "Please run 'ruby db/seed_dev.rb' to load data into current month"
+  end
+
+  
+  desc "migrate db"
   task :migrate => :environment do
     puts "Migrate START"
     dbs = $conf_env.keys.map do |k| $conf_env[k]['database'] end
     dbs.each do |db|
-      out = %x{sequel -l db/migrate.log -m db/migrate mysql2://root:admin@localhost:3306/#{db}}
+      out = %x{sequel -E -m db/migrate mysql2://root:admin@localhost:3306/#{db}}
       puts out
     end
     puts "Migrate END"
   end
 
-  desc "Load the db"
+  desc "load axagenda data"
   task :seed => :environment do
     puts "Seed START"
     Calendar.server(:je).where(:title => 'Actions Jobenfance').count != 0 or
