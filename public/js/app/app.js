@@ -6,7 +6,7 @@
  */
 Ext.Loader.setConfig({
     enabled: true,
-    disableCaching: false,
+    disableCaching: true,
     paths: {
 	"AxAgenda": "/js/app",	// SUBSTITUTE FOR DEPLOY
 	"Extensible": "/js/extensible/src", // SUBSTITUTE FOR DEPLOY
@@ -24,7 +24,7 @@ Ext.require([
     'Extensible.calendar.gadget.CalendarListMenu',
     'Extensible.calendar.gadget.CalendarListPanel',    
     'AxAgenda.store.Calendars',
-    'AxAgenda.view.CalendarPanel',
+    'Extensible.calendar.CalendarPanel',
     'AxAgenda.view.UserListPanel',
     'AxAgenda.model.UsersStates'
     // 'Extensible.calendar.view.AbstractCalendar'
@@ -104,7 +104,8 @@ Ext.application({
             Url:         {name: 'Url', mapping: 'url'},
             IsAllDay:    {name: 'IsAllDay', mapping: 'all_day', type: 'boolean'},
             Reminder:    {name: 'Reminder', mapping: 'reminder'},
-	    Owner:       {name: 'Owner',    mapping: 'owner'}
+	    Owner:       {name: 'Owner',    mapping: 'owner'},
+	    Contact:     {name: 'Contact',  mapping: 'contact'}
 	};
 	Extensible.calendar.data.EventModel.reconfigure();
 
@@ -138,8 +139,8 @@ Ext.application({
 	var eventStore = Ext.create('Extensible.calendar.data.EventStore', {
             autoLoad: true,
             proxy: {
-		type: 'rest',
-		noCache: false,
+		type: 'ajax',
+		noCache: true,
 		pageParam: null,
 		startParam: null,
 		limitParam: null,
@@ -154,26 +155,26 @@ Ext.application({
 		}
             },
 
-            listeners: {
-		'write': function(store, operation) {
-                    var title = Ext.value(operation.records[0].data[Extensible.calendar.data.EventMappings.Title.name], '(No title)');
-                    switch(operation.action){
-                    case 'create':
-                        Extensible.example.msg('Add', 'Added "' + title + '"');
-                        break;
-                    case 'update':
-                        Extensible.example.msg('Update', 'Updated "' + title + '"');
-                        break;
-                    case 'destroy':
-                        Extensible.example.msg('Delete', 'Deleted "' + title + '"');
-                        break;
-                    }
-		}
-            }
+            // listeners: {
+	    // 	'write': function(store, operation) {
+            //         var title = Ext.value(operation.records[0].data[Extensible.calendar.data.EventMappings.Title.name], '(No title)');
+            //         switch(operation.action){
+            //         case 'create':
+            //             AxAgenda.view.CalendarPanel.msg('Add', 'Added "' + title + '"');
+            //             break;
+            //         case 'update':
+            //             AxAgenda.view.CalendarPanel.msg('Update', 'Updated "' + title + '"');
+            //             break;
+            //         case 'destroy':
+            //             AxAgenda.view.CalendarPanel.msg('Delete', 'Deleted "' + title + '"');
+            //             break;
+            //         }
+	    // 	}
+            // }
 	});
 	
 	// This is the actual calendar setup code -- pretty simple!
-	var calendarPanel = Ext.create('AxAgenda.view.CalendarPanel', {
+	var calendarPanel = Ext.create('Extensible.calendar.CalendarPanel', {
             id: 'app-calendar',
             region: 'center',
 	    border: false,

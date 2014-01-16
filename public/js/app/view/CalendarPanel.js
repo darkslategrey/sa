@@ -15,15 +15,18 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     // ],
     
     activeItem: 3, // month view
+
     startDay: 0, // The 0-based index for the day on which the calendar week begins (0=Sunday)
+
+    recurrence: true,
     
     // Any generic view options that should be applied to all sub views:
     viewConfig: {
-        //enableFx: false,
-        //ddIncrement: 10, //only applies to DayView and subclasses, but convenient to put it here
-        //viewStartHour: 6,
-        //viewEndHour: 18,
-        //minEventDisplayMinutes: 15
+        enableFx: true,
+        ddIncrement: 10, //only applies to DayView and subclasses, but convenient to put it here
+        viewStartHour: 8,
+        viewEndHour: 22,
+        minEventDisplayMinutes: 30,
         showTime: false
     },
     
@@ -39,21 +42,32 @@ Ext.define('AxAgenda.view.CalendarPanel', {
         //weekCount: 3
     },
 
-
     // Some optional CalendarPanel configs to experiment with:
     //readOnly: true,
     //showDayView: false,
-    //showMultiDayView: true,
+    showMultiDayView: true,
     //showWeekView: false,
     //showMultiWeekView: false,
     //showMonthView: false,
-    //showNavBar: false,
-    //showTodayText: false,
+    showNavBar: true,
+    // showTodayText: false,
     //showTime: false,
-    //editModal: true,
+    editModal: true,
     //enableEditDetails: false,
     //title: 'My Calendar', // the header of the calendar, could be a subtitle for the app
-    
+
+    static: {
+	msg: function(title, format){
+            if(!this.msgCt){
+		this.msgCt = Ext.core.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+            }
+            this.msgCt.alignTo(document, 't-t');
+            var s = Ext.String.format.apply(String, Array.prototype.slice.call(arguments, 1));
+            var m = Ext.core.DomHelper.append(this.msgCt, {html:'<div class="msg"><h3>' + title + '</h3><p>' + s + '</p></div>'}, true);
+            
+            m.slideIn('t').pause(3000).ghost('t', {remove:true});
+	}
+    }
 });
 
 

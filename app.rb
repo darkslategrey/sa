@@ -1,3 +1,4 @@
+# coding: utf-8
 
 # $:.unshift File.dirname(__FILE__) + "/../lib"
 
@@ -5,7 +6,6 @@ require 'yaml'
 require 'haml'
 require 'json'
 require 'sinatra'
-
 require 'pp'
 
 environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
@@ -20,8 +20,15 @@ Dir['models/*.rb'].map do |m| require "./#{m}" end
 
 
 class AxAgenda < Sinatra::Base
-  extend Axagenda::Logging
-
+  # include Axagenda::Logging
+  
+  configure do
+    enable :show_exceptions
+    enable :dump_errors
+    enable :logging
+    enable :raise_errors
+  end
+  
   get '/' do
     haml :index
     # haml :remote, :layout => :remote_layout    
@@ -47,18 +54,15 @@ class AxAgenda < Sinatra::Base
     { :events => events, :success => true }.to_json 
   end
 
+
   post '/events' do
-    # all_day: false
-    # cid: "1"
-    # end: "2014-01-06T01:00:00+01:00"
-    # id: ""
-    # location: ""
-    # notes: ""
-    # reminder: ""
-    # start: "2014-01-06T00:00:00+01:00"
-    # title: "fdsfds"
-    # url: ""
-  end 
+    request.body.rewind
+    @request_payload = JSON.parse request.body.read
+    logger.info("params event post #{@request_payload}")
+    status = Action.update_doli @request_payload
+    status.to_json
+  end
+
   
   get '/calendars' do
     calendars = [:je, :jd].map do |srv| Calendar.server(srv).first.as_ax end

@@ -1,3 +1,4 @@
+# coding: utf-8
 require File.expand_path '../spec_helper.rb', __FILE__
 
 include Rack::Test::Methods
@@ -33,5 +34,26 @@ describe "Axagenda App" do
     assert_operator response["users"].size, :>, 0    
   end
 
-  
+  it "should update the action" do
+    params = { "EventId" =>  "438",
+               "all_day" =>  false,
+               "cid" =>  "2",
+               "cname" =>  "jd",
+               "end" =>  "2014-01-14T09:30:00+01:00",
+               "id" =>  "438",
+               "location" =>  "",
+               "notes" =>  "",
+               "owner" =>  1,
+               "reminder" =>  "",
+               "start" =>  "2014-01-14T09:00:00+01:00",
+               "title" =>  "438 / se voir à vincennes et faire le point sur collaboration jkhjkhjk",
+               "url" =>  ""
+             }
+    post '/events', params
+    response = JSON.parse last_response.body
+    pp response
+    assert_equal response['success'], true
+    action = Action.server(:jd).where(:id => 438).first
+    assert_equal action.label, "438 / se voir à vincennes et faire le point sur collaboration jkhjkhjk"
+  end
 end
