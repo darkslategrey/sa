@@ -123,7 +123,7 @@ Ext.application({
             autoLoad: true,
             proxy: {
 		type: 'ajax',
-		url: 'calendars',
+		url: document.location.pathname + '/calendars',
 		noCache: false,
 		
 		reader: reader
@@ -143,7 +143,7 @@ Ext.application({
 		pageParam: null,
 		startParam: null,
 		limitParam: null,
-		url: 'events',
+		url: document.location.pathname + '/events',
 		reader: {
                     type: 'json',
                     root: 'events'
