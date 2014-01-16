@@ -8,8 +8,8 @@ Ext.Loader.setConfig({
     enabled: true,
     disableCaching: false,
     paths: {
-	"AxAgenda": "js/app",
-	"Extensible": "js/extensible/src",
+	"AxAgenda": document.URL + "/js/app",
+	"Extensible": document.URL + "/js/extensible/src",
 	// "Ext": "js/extjs/src"
 	// "Extensible.example": "./js"
     }
