@@ -39,7 +39,7 @@ task :environment do
   # invoke :'rbenv:load'
   set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
-  set_default :rails_env, 'development'    
+  set_default :rails_env, 'production'    
   set_default :bundle_prefix, lambda { %{RACK_ENV="#{rails_env}" #{bundle_bin} exec} }
   set :bundle_options, lambda { %{--without development --path "#{bundle_path}" --binstubs bin/ --deployment}}
     # %{--without development:test --path "#{bundle_path}" --binstubs bin/ --deployment}
@@ -86,18 +86,6 @@ task :deploy => :environment do
       queue "ln -s #{deploy_to}/tmp #{deploy_to}/current/tmp"
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
-  end
-end
-
-desc "Setup the dev env"
-task :setup_dev => :environment do
-  deploy do
-    invoke :'git:clone'
-    invoke :'deploy:link_shared_paths'
-    invoke :'bundle:install'
-    queue! "#{rake} db:setup_dev"
-    queue! "#{rake} db:migrate"
-    queue! "#{rake} db:attach_user"
   end
 end
 
