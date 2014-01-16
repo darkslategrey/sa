@@ -43,7 +43,6 @@ task :deploy => :environment do
     to :launch do
       queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/url: /url: document.location.pathname + /' #{deploy_to}/current/public/js/app/app.js public/js/app/view/UserListPanel.js"
       queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/appFolder: /appFolder: document.location.pathname + /' #{deploy_to}/current/public/js/app/app.js"
-      # queue! 'sed -i "/SUBSTITUTE FOR DEPLOY/ s/\(AxAgenda\x22:\|Extensible\x22:\)/\1 document.location.pathname +/"' + " #{deploy_to}/current/public/js/app/app.js"
       queue! 'sed -i "/SUBSTITUTE FOR DEPLOY/ s/\(AxAgenda\x22:\)/\1 document.location.pathname +/"' + " #{deploy_to}/current/public/js/app/app.js"
       queue! 'sed -i "/SUBSTITUTE FOR DEPLOY/ s,\x22Extensible\x22:,// Extensible\x22:,"' + " #{deploy_to}/current/public/js/app/app.js"
       queue! 'sed -i -e "/Extensible.js/d" -e "s/extensible-all-debug.js/extensible-all.js/"' + " #{deploy_to}/current/views/html/head.haml"
