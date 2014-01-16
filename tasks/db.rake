@@ -72,6 +72,17 @@ namespace :db do
     puts "Please run 'ruby db/seed_dev.rb' to load data into current month"
   end
 
+
+  desc "revert db[migration_number]"
+  task :revert, [:version]  => :environment do |t, args|
+    puts "Migrate START"
+    dbs = $conf_env.keys.map do |k| $conf_env[k]['database'] end
+    dbs.each do |db|
+      out = %x{sequel -E -m db/migrate  -M #{args[:version]} mysql2://root:admin@localhost:3306/#{db}}
+      puts out
+    end
+    puts "Migrate END"
+  end
   
   desc "migrate db"
   task :migrate => :environment do
@@ -111,4 +122,21 @@ namespace :db do
     end
     puts "Set ids END" 
   end
+
+  desc "Attach users to axagenda"
+  task :attach_user => :environment do
+    puts "Attach user START"
+    [:je, :jd].each do |db|
+      ax_agenda = Calendar.server(db).where('name like "Actions%"').first
+      ax_group_users = Group.server(db).where(:nom => 'AX Agenda').first.users
+      ax_group_users.each do |user|
+        next if user.agendas.size > 0
+        puts "\tAdd #{user.firstname} to #{ax_agenda.name}"
+        ax_agenda.add_user user
+      end
+      ax_agenda.save
+    end
+    puts "Attach user END"
+  end
 end
+

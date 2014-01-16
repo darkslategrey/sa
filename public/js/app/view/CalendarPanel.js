@@ -4,6 +4,12 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     alias: 'widget.axagenda.calendarpanel',
     id: 'app-calendar',
 
+    initComponent: function() {
+	var me = this;
+
+	// Ext.override(Extensible.calendar.view.AbstractCalendar, {
+	me.callParent(arguments);
+    },
     // requires: [
     // 	'Extensible.calendar.CalendarPanel', 'AxAgenda.store.Events', 'AxAgenda.store.Calendars'
     // ],
@@ -32,7 +38,8 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     multiWeekViewCfg: {
         //weekCount: 3
     },
-    
+
+
     // Some optional CalendarPanel configs to experiment with:
     //readOnly: true,
     //showDayView: false,

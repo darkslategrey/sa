@@ -1,14 +1,24 @@
+
 Ext.define('AxAgenda.view.UserListPanel', {
     extend: 'Ext.panel.Panel',
     layout: 'fit',
     alias: 'widget.axagenda.userlistpanel',
 
+    requires: [ 'AxAgenda.model.UsersStates' ],
+    
+    store: null,
+    calendarStore: null,
+    eventStore: null,
 
+    controllers: ['Calendars'],
+
+    
     initComponent: function() {
 	Ext.apply(this, {
 	    renderTo: Ext.getBody(),
 	    tbar: [{
 		text: 'Tous / Aucun',
+		id: this.agenda + '-button',
 		pressed: true,
 		enableToggle: true,
 		toggleHandler: function(button, pressed){
@@ -43,29 +53,38 @@ Ext.define('AxAgenda.view.UserListPanel', {
 	var i, len = jsonResponse.users.length, user;
 	var checkboxgroup = {
 	    xtype: 'checkboxgroup',
+
 	    fieldLabel: '',
 	    columns: 1,
 	    items: []
 	};
+	checkboxgroup.id = this.agenda + '-users-checkboxgroup';
 	for(i = 0; i < len; i++) {
 	    user = jsonResponse.users[i];
+
+	    AxAgenda.model.UsersStates[this.agenda].allUsers.push(user.id);
+	    if(user.selected) {
+		AxAgenda.model.UsersStates[this.agenda].visible.push(user.id);
+	    } else {
+		AxAgenda.model.UsersStates[this.agenda].notVisible.push(user.id);
+	    }
 	    checkboxgroup.items.push({
 		xtype: 'checkbox',
 		boxLabel: user.nom,
-		name: this.agenda+'-users',
+		name: 'user',
 		inputValue: user.id,
-		checked: user.selected,
-		listeners: {
-		    change: this.onChange
-		}
+		checked: user.selected
+		// listeners: {
+		//     change: this.onChange
+		// }
 	    });
 	}
 	this.add(checkboxgroup);	
     },
 
-    onChange: function(nv, ov, opts) {
-	console.log("nv <"+nv+"> ov <"+ov+"> <"+opts);
-    }
+    // onChange: function(nv, ov, opts) {
+    // 	console.log("nv <"+nv+"> ov <"+ov+"> <"+opts);
+    // }
     
     // requires: [
     //     'Ext.XTemplate',

@@ -2,9 +2,12 @@
 
 
 describe("User", function() {
-    // var store, ctlr, Application = null;
-    // var Application = new AxAgenda();
+    var store, ctlr, Application = null;
+    var Application = new AxAgenda();
 
+    // TESTER LES CLICKS SUR LES USERS
+
+    
     // var usersStore = null, app = null;
     
     // beforeEach(function() {
