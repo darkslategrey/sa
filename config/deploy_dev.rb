@@ -47,6 +47,7 @@ task :deploy => :environment do
       queue! 'sed -i "/SUBSTITUTE FOR DEPLOY/ s,\x22Extensible\x22:,// Extensible\x22:,"' + " #{deploy_to}/current/public/js/app/app.js"
       queue! 'sed -i -e "/Extensible.js/d" -e "s/extensible-all-debug.js/extensible-all.js/"' + " #{deploy_to}/current/views/html/head.haml"
       queue! 'sed -i "/extensible-all.js/ s/-# //"' + " #{deploy_to}/current/views/html/head.haml"
+      # queue! "ln -sf #{deploy_to}/current/public/js/extjs/ext.js #{deploy_to}/current/public/js/extjs/ext-all.js"
       queue! "chown -R www-data.www-data #{deploy_to}/current/"
       queue! "ln -s #{deploy_to}/tmp #{deploy_to}/current/tmp"
       queue! "touch #{deploy_to}/tmp/restart.txt"
