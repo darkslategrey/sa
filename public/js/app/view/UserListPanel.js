@@ -35,7 +35,7 @@ Ext.define('AxAgenda.view.UserListPanel', {
 
     ajaxLoadUsers: function(){
 	Ext.Ajax.request({
-	    url: document.location.pathname + '/users?agenda='+this.agenda,
+	    url: '/users?agenda='+this.agenda, // SUBSTITUTE FOR DEPLOY
 	    success: function(response){
 		console.log(response);
 		var jsonResponse = Ext.decode(response.responseText);

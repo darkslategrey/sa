@@ -1,3 +1,4 @@
+# coding: utf-8
 $:.unshift File.dirname(__FILE__) + "/../lib"
 
 require 'active_support/all'
@@ -17,7 +18,10 @@ class Action < Sequel::Model
 
   many_to_one :societe,    :key => :fk_soc
   many_to_one :contact,    :key => :fk_contact
-  
+
+  # => 86340 secondes dans 23h59 minutes
+  # c'est de cette façon que le doli identifit les fullday
+  DOLI_FULLDAY = 60 * 60 * 23 + (60 * 59)
     # events = [ {
     #              "id"    => 1001,
     #              "cid"   => 1,
@@ -37,13 +41,51 @@ class Action < Sequel::Model
     endDate   = DateTime.parse params['endDate']    
     endDate   = endDate == startDate ? startDate + 1.day : endDate
     actions = srvs.map do |srv|
-      self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}' and ax_agenda_id != 0").order(:datep).all
+      reorder self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}' and ax_agenda_id != 0").order(:datep, :datec).all
     end
     actions.flatten.map do |action|
       action.to_ax
     end
   end
 
+  # Les actions doli toute la journée sont convertis en events AX
+  # Ces actions s'ordonnent à  1/2 d'interval pour apparaître dans
+  # le panneau principal de l'AX
+  def self.reorder actions
+    ordered_actions = {}
+    actions.each do |action|
+      datep, datep2  = action.datep, action.datep2
+      d, m, y        = datep.day, datep.month, datep.year
+      sorted_actions = ordered_actions["#{d}-#{m}-#{y}"] || {:fullday => [], :rdv => []} 
+      if action.is_fullday
+        sorted_actions[:fullday] << action
+      else
+        sorted_actions[:rdv] << action
+      end
+      ordered_actions["#{d}-#{m}-#{y}"] = sorted_actions
+    end
+
+    converted_actions = []
+    ordered_actions.each_pair do |date, actions|
+      hour, min = 9, 0
+      d, m, y   = date.split '-'
+      nd = DateTime.new(y.to_i, m.to_i, d.to_i, hour, min, 0, '+1')
+      actions[:fullday].each do |action|
+        action.datep  = nd
+        action.datep2 = nd + 30.minute
+        nd += 30.minute
+        converted_actions << action
+      end
+    end
+    converted_actions
+  end
+
+  def is_fullday
+    return true if fulldayevent == 1
+    return true if datep2 - datep == DOLI_FULLDAY
+    return true if datep2 == datep
+    return false
+  end
 
   def to_ax
     {

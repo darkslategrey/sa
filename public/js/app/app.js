@@ -8,8 +8,8 @@ Ext.Loader.setConfig({
     enabled: true,
     disableCaching: false,
     paths: {
-	"AxAgenda": document.location.pathname + "/js/app",
-	"Extensible": document.location.pathname + "/js/extensible/src",
+	"AxAgenda": "/js/app",	// SUBSTITUTE FOR DEPLOY
+	"Extensible": "/js/extensible/src", // SUBSTITUTE FOR DEPLOY
 	// "Ext": "js/extjs/src"
 	// "Extensible.example": "./js"
     }
@@ -33,7 +33,7 @@ Ext.require([
 Ext.application({
 
     name: 'AxAgenda',
-    appFolder: document.location.pathname + '/js/app',
+    appFolder: '/js/app',  // SUBSTITUTE FOR DEPLOY  
 
     controllers: ['Calendars'],    
 
@@ -123,7 +123,7 @@ Ext.application({
             autoLoad: true,
             proxy: {
 		type: 'ajax',
-		url: document.location.pathname + '/calendars',
+		url: '/calendars', // SUBSTITUTE FOR DEPLOY		
 		noCache: false,
 		
 		reader: reader
@@ -143,7 +143,7 @@ Ext.application({
 		pageParam: null,
 		startParam: null,
 		limitParam: null,
-		url: document.location.pathname + '/events',
+		url: '/events', // SUBSTITUTE FOR DEPLOY		
 		reader: {
                     type: 'json',
                     root: 'events'

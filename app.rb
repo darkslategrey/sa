@@ -9,6 +9,7 @@ require 'sinatra'
 require 'pp'
 
 environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
+
 conf = YAML.load_file './config/database.yml'
 $conf_env = conf[environment]
 
@@ -19,7 +20,7 @@ Dir['models/*.rb'].map do |m| require "./#{m}" end
 
 
 class AxAgenda < Sinatra::Base
-  include Axagenda::Logging
+  extend Axagenda::Logging
 
   get '/' do
     haml :index

@@ -21,14 +21,17 @@ describe "Axagenda App" do
 
 
   it "should return a list of events" do
-    get '/events?startDate=2013-12-29&endDate=2014-02-01&page=1&start=0&limit=25'
+    get '/events?startDate=2013-12-29&endDate=2014-02-01'
     response = JSON.parse last_response.body
   end
 
   it "should return all the ax group users" do
-    get '/users'
+    get '/users?agenda=je'
     response = JSON.parse last_response.body
-    assert_operator response["users"]["je"].size, :>, 0
-    assert_operator response["users"]["jd"].size, :>, 0    
+    assert_operator response["users"].size, :>, 0
+    get '/users?agenda=jd'    
+    assert_operator response["users"].size, :>, 0    
   end
+
+  
 end
