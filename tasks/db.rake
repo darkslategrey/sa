@@ -49,17 +49,17 @@ namespace :db do
       dev_db_name  = $conf_env[db]['database']
       prod_db_name = $axdbconf['production'][db]['database']
 
-      puts "\t\tdrop dev #{db}"
-      %x/mysqladmin -u #{dev_username} -p#{dev_pass} -f drop #{dev_db_name}/ 
+      puts "\t\tdrop dev #{db} #{dev_db_name}"
+      # %x/mysqladmin -u #{dev_username} -p#{dev_pass} -f drop #{dev_db_name}/ 
 
-      puts "\t\tcreate dev #{db}"
-      %x/mysqladmin -u #{dev_username} -p#{dev_pass} create #{dev_db_name}/
+      puts "\t\tcreate dev #{db} #{dev_db_name}"
+      # %x/mysqladmin -u #{dev_username} -p#{dev_pass} create #{dev_db_name}/
       
-      puts "\t\tdump #{db}"
-      %x[mysqldump -u #{dev_username} -p#{dev_pass} #{prod_db_name} > db/prod_#{db}.dump.sql]
+      puts "\t\tdump #{db} #{dev_db_name}"
+      # %x[mysqldump -u #{dev_username} -p#{dev_pass} #{prod_db_name} > db/prod_#{db}.dump.sql]
       
-      puts "\t\tload dev #{db}"
-      %x[cat db/prod_#{db}.dump.sql | mysql -u #{dev_username} -p#{dev_pass} #{dev_db_name}]
+      puts "\t\tload dev #{db} #{dev_db_name}"
+      # %x[cat db/prod_#{db}.dump.sql | mysql -u #{dev_username} -p#{dev_pass} #{dev_db_name}]
 
       # puts "\t\tload dev seed data #{db} START"
       # %x[ruby db/seed_dev.rb]

@@ -86,6 +86,17 @@ task :deploy => :environment do
   end
 end
 
+desc "Setup the dev env"
+task :setup_dev => :environment do
+  deploy do
+    invoke :'git:clone'
+    invoke :'deploy:link_shared_paths'
+    invoke :'bundle:install'
+    queue! "#{rake db:setup_dev"
+  end
+end
+
+
 # For help in making your deploy script, see the Mina documentation:
 #
 #  - http://nadarei.co/mina
