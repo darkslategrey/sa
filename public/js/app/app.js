@@ -8,8 +8,8 @@ Ext.Loader.setConfig({
     enabled: true,
     disableCaching: false,
     paths: {
-	"AxAgenda": document.URL + "/js/app",
-	"Extensible": document.URL + "/js/extensible/src",
+	"AxAgenda": document.location.pathname + "/js/app",
+	"Extensible": document.location.pathname + "/js/extensible/src",
 	// "Ext": "js/extjs/src"
 	// "Extensible.example": "./js"
     }
@@ -33,7 +33,7 @@ Ext.require([
 Ext.application({
 
     name: 'AxAgenda',
-    appFolder: 'js/app',
+    appFolder: document.location.pathname + '/js/app',
 
     controllers: ['Calendars'],    
 
