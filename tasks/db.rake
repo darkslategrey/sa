@@ -55,16 +55,16 @@ namespace :db do
       puts "\t\tcreate dev #{db} #{dev_db_name}"
       %x/mysqladmin -u #{dev_username} -p#{dev_pass} create #{dev_db_name}/
       
-      puts "\t\tdump #{db} #{dev_db_name}"
+      puts "\t\tdump #{prod_db_name} #{dev_db_name}"
       %x[mysqldump -u #{dev_username} -p#{dev_pass} #{prod_db_name} > db/prod_#{db}.dump.sql]
       
-      puts "\t\tload dev #{db} #{dev_db_name}"
+      puts "\t\tload prod db into dev #{db} #{dev_db_name}"
       %x[cat db/prod_#{db}.dump.sql | mysql -u #{dev_username} -p#{dev_pass} #{dev_db_name}]
 
     end
-    puts "\t\tload dev seed data #{db} START"
+    puts "\t\tload dev seed data START"
     %x[ruby db/seed_dev.rb]
-    puts "\t\tload dev seed data #{db} END"      
+    puts "\t\tload dev seed data END"      
     puts "\tcreate dev dbs END"
     puts "setup dev db END"
     puts "Please run 'ruby db/seed_dev.rb' to load data into current month"
