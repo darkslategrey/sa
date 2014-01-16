@@ -39,8 +39,11 @@ task :environment do
   # invoke :'rbenv:load'
   set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
-  set_default :rails_env, 'production'    
+  set_default :rails_env, 'development'    
   set_default :bundle_prefix, lambda { %{RACK_ENV="#{rails_env}" #{bundle_bin} exec} }
+  set :bundle_options, lambda { %{--without development --path "#{bundle_path}" --binstubs bin/ --deployment}}
+    # %{--without development:test --path "#{bundle_path}" --binstubs bin/ --deployment}
+
   set_default :rake, lambda { %{#{bundle_prefix} rake} }
   
   # For those using RVM, use this to load an RVM version@gemset.
@@ -92,7 +95,9 @@ task :setup_dev => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    queue! "#{rake db:setup_dev"
+    queue! "#{rake} db:setup_dev"
+    queue! "#{rake} db:migrate"
+    queue! "#{rake} db:attach_user"
   end
 end
 
