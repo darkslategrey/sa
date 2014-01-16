@@ -194,7 +194,7 @@ Ext.application({
 	// users panels
 	
 	var jeUserListPanel = Ext.create('AxAgenda.view.UserListPanel', {
-	    title: 'Utilisateurs Je',
+	    title: 'Utilisateurs Jobenfance',
 	    agenda: 'je',
 	    id: 'je-user-list-panel',
 	    calendarStore: calendarStore,
@@ -202,7 +202,7 @@ Ext.application({
 	});
 
 	var jdUserListPanel = Ext.create('AxAgenda.view.UserListPanel', {
-	    title: 'Utilisateurs Jd',
+	    title: 'Utilisateurs Jobdependance',
 	    agenda: 'jd',
 	    id: 'jd-user-list-panel',
 	    calendarStore: calendarStore,
