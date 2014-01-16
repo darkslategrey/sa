@@ -76,9 +76,10 @@ task :deploy => :environment do
     invoke :'bundle:install'
 
     queue! "#{rake} db:migrate"
-    queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/url: /url: document.location.pathname + /' public/js/app/app.js public/js/app/view/UserListPanel.js"
-    queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/appFolder: /appFolder: document.location.pathname + /' public/js/app/app.js"
-    queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/\(AxAgenda\x22:\|Extensible\x22:\)/\1 document.location.pathname +/' public/js/app/app.js"
+
+    queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/url: /url: document.location.pathname + /' #{deploy_to}/current//public/js/app/app.js public/js/app/view/UserListPanel.js"
+    queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/appFolder: /appFolder: document.location.pathname + /' #{deploy_to}/current//public/js/app/app.js"
+    queue! "sed -i '/SUBSTITUTE FOR DEPLOY/ s/\(AxAgenda\x22:\|Extensible\x22:\)/\1 document.location.pathname +/' #{deploy_to}/current//public/js/app/app.js"
 
     
     # queue "%[rake js:minify]"
