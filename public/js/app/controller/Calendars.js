@@ -35,6 +35,11 @@ Ext.define('AxAgenda.controller.Calendars', {
 	    // '#jd-button': {
 	    // 	toggle: this.onUserListClick
 	    // },
+
+	    '#event-window': {
+		
+	    },
+	    
 	    '#jd-users-checkboxgroup': {
 		change: this.onUserCheckboxChange
 	    },

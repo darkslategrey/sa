@@ -26,6 +26,7 @@ Ext.require([
     'AxAgenda.store.Calendars',
     'Extensible.calendar.CalendarPanel',
     'AxAgenda.view.UserListPanel',
+    'AxAgenda.view.EventWindow',    
     'AxAgenda.model.UsersStates'
     // 'Extensible.calendar.view.AbstractCalendar'
 ]);
@@ -38,8 +39,15 @@ Ext.application({
     controllers: ['Calendars'],    
 
     launch: function() {
-
-
+	// Ext.override(Extensible.calendar.form.EventWindow, {
+	//     contact_mail: '',
+	//     contact_phones: '',
+	//     alias: 'widget.axcalendar.eventeditwindow'
+	// });
+	Ext.override(Extensible.calendar.CalendarPanel, {
+	    editWin : Ext.WindowMgr.get('axagenda-cal-editwin')
+	});
+	
 	Ext.override(Extensible.calendar.view.AbstractCalendar, {
 	    isEventVisible: function(evt) {
 		var eventMappings = Extensible.calendar.data.EventMappings,
@@ -179,9 +187,21 @@ Ext.application({
             region: 'center',
 	    border: false,
             eventStore: eventStore,
+	    xtype: 'axagenda.eventeditwindow',
+	    todayText: 'bonjour',
             calendarStore: calendarStore,
-	});
 
+	    // init: function() {
+	    // 	this.editWin =  Ext.WindowMgr.get('axagenda-cal-editwin');
+	    // }
+	});
+	
+	Ext.apply('Extensible.calendar.CalendarPanel', {
+	    getEventEditor: function() {
+		console.log("get editor");
+	    }
+	});
+		  
 	var calendarList = Ext.create('Extensible.calendar.gadget.CalendarListPanel', {
 	    layout: 'card',
 	    autoHeight: 'false',
@@ -190,7 +210,12 @@ Ext.application({
             width: 178,
 	    height: 80,
 	    collapsible: false
+	}, function() {
+ 	    this.showEventEditor = function() {
+		
+	    };
 	});
+
 
 	// users panels
 	

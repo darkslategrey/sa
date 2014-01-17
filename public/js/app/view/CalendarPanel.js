@@ -7,6 +7,9 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     initComponent: function() {
 	var me = this;
 
+	me.getEventEditor: function() {
+	},
+
 	// Ext.override(Extensible.calendar.view.AbstractCalendar, {
 	me.callParent(arguments);
     },
@@ -50,6 +53,7 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     //showMultiWeekView: false,
     //showMonthView: false,
     showNavBar: true,
+    editWin =  Ext.WindowMgr.get('axagenda-cal-editwin'),
     // showTodayText: false,
     //showTime: false,
     editModal: true,
@@ -57,6 +61,8 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     //title: 'My Calendar', // the header of the calendar, could be a subtitle for the app
 
     static: {
+
+	
 	msg: function(title, format){
             if(!this.msgCt){
 		this.msgCt = Ext.core.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
