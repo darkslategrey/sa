@@ -13,6 +13,7 @@ Ext.define('AxAgenda.controller.Calendars', {
 
     init: function() {
     	this.control({
+	    
     	    '#app-calendar': {
     		viewchange: this.updateTitle,
 		eventclick: this.onEventClick,
@@ -29,6 +30,9 @@ Ext.define('AxAgenda.controller.Calendars', {
 		eventdelete: this.onEventDelete,
 		initdrag: this.onInitDrag
     	    },
+	    '#eventeditwindow': {
+		beforerender: this.onEditDay,
+	    },
 	    // '#je-button': {
 	    // 	toggle: this.onUserListClick
 	    // },
@@ -151,6 +155,7 @@ Ext.define('AxAgenda.controller.Calendars', {
     },
     
     onEventClick: function(vw, rec, el){
+	console.log('event click ici');
         this.clearMsg();
     },
     

@@ -5,7 +5,7 @@ require 'active_support/all'
 require 'ax_logger'
 
 class Action < Sequel::Model
-  include ::Axagenda::Logging
+  extend Axagenda::Logging
   
   set_dataset :llx_actioncomm
 
@@ -76,10 +76,47 @@ class Action < Sequel::Model
         nd += 30.minute
         converted_actions << action
       end
+      converted_actions += actions[:rdv]
     end
     converted_actions
   end
 
+    # EventId: "1088"
+    # all_day: false
+    # cid: "2"
+    # cname: "jd"
+    # end: "2014-01-14T10:30:00+01:00"
+    # id: "1088"
+    # location: ""
+    # notes: null
+    # owner: 2
+    # reminder: ""
+    # start: "2014-01-14T10:00:00+01:00"
+    # title: "1088 / RDV Client Synhèse et début collaboration jhjjkhkj"
+    # url: ""
+  def self.update_doli params
+    self.logger.debug("Start update <#{params['cname']}> <#{params['id']}>")
+    msg = ''
+    success = false
+    action = Action.server(params['cname'].to_sym).where(:id => params['id']).first
+    action.label = params['title']
+    action.note  = params['notes']
+    action.datep = params['start']
+    action.datep2 = params['end']
+
+    begin 
+      action.save
+    rescue Exception => e
+      msg = "Erreur mise à jour: #{e}"
+      success = false
+    else
+      msg = "Action mise à jour"
+      success = true
+    end
+    { :msg => msg, :success => success }
+  end
+
+  
   def is_fullday
     return true if fulldayevent == 1
     return true if datep2 - datep == DOLI_FULLDAY
@@ -88,15 +125,23 @@ class Action < Sequel::Model
   end
 
   def to_ax
+    environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
+    title = environment == 'development' ? "#{id} / " : ''
+    title += societe.nil? ? label : societe.nom
+    title += ' - '
+    title += contact.nil? ? {} : "#{contact}"
+
+    ax_contact = contact.nil? ? nil : contact.to_ax
     {
       "id"    => id,
       "cid"   => calendar.id,
       "cname" => calendar.shortname,
-      "title" => "#{id} / #{label}",
+      "title" => title,
       "start" => DateTime.parse(datep.to_s).to_s,
       "end"   => DateTime.parse(datep2.to_s).to_s,
       "notes" => note,
-      "owner" => user_todo.rowid
+      "owner" => user_todo.rowid,
+      "contact" => ax_contact
     }
   end
 end

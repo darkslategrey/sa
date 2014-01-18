@@ -39,7 +39,24 @@ Ext.application({
 
     launch: function() {
 
+	// Ext.apply('Extensible.calendar.data.EventModel', {
+	//     getContactEmail: function() {
+	// 	this.data['contact']['email'];
+	//     },
+	//     getContactTel: function() {
+	// 	this.data['contact']['tel'];
+	//     }
+	// });
 
+	// Ext.apply('Extensible.calendar.form.EventWindow', {
+
+	    
+	// });
+	
+	// Ext.override(Extensible.calendar.form.EventWindow, {
+	//
+	// });
+	
 	Ext.override(Extensible.calendar.view.AbstractCalendar, {
 	    isEventVisible: function(evt) {
 		var eventMappings = Extensible.calendar.data.EventMappings,
@@ -104,7 +121,10 @@ Ext.application({
             Url:         {name: 'Url', mapping: 'url'},
             IsAllDay:    {name: 'IsAllDay', mapping: 'all_day', type: 'boolean'},
             Reminder:    {name: 'Reminder', mapping: 'reminder'},
-	    Owner:       {name: 'Owner',    mapping: 'owner'}
+	    Owner:       {name: 'Owner',    mapping: 'owner'},
+	    Contact:     {name: 'Contact',  mapping: 'contact'},
+	    ContactMail:  {name: 'ContactMail', mapping: 'contact.email'},
+	    ContactTel:   {name: 'ContactTel',  mapping: 'contact.tel'}
 	};
 	Extensible.calendar.data.EventModel.reconfigure();
 
