@@ -1,3 +1,4 @@
+# coding: utf-8
 
 # $:.unshift File.dirname(__FILE__) + "/../lib"
 
@@ -5,6 +6,7 @@ require 'yaml'
 require 'haml'
 require 'json'
 require 'sinatra'
+require 'logger'
 
 require 'pp'
 
@@ -14,15 +16,25 @@ conf = YAML.load_file './config/database.yml'
 $conf_env = conf[environment]
 
 require './lib/db_connect'
-require './lib/ax_logger'
+# require './lib/ax_logger'
 
 Dir['models/*.rb'].map do |m| require "./#{m}" end
 
-
 class AxAgenda < Sinatra::Base
-  extend Axagenda::Logging
 
+  configure do
+    enable :logging, :dump_errors, :raise_errors, :show_exceptions
+    # logger = Logger.new 'log/app.log'
+    logger = Logger.new 'log/app.log'    
+    # logger.level = Logger::Severity::DEBUG
+    logger.level = Logger::DEBUG    
+    logger.datetime_format = '%a %d-%m-%Y %H%M '
+    set :logger, logger
+  end
+  
+  
   get '/' do
+    logger.info 'get index'
     haml :index
     # haml :remote, :layout => :remote_layout    
   end
@@ -37,7 +49,16 @@ class AxAgenda < Sinatra::Base
       end
     { :users => users, :success => true }.to_json
   end
-  
+
+
+  put '/events/:id' do |event_id|
+    request.body.rewind  
+    data = JSON.parse request.body.read
+    logger.info "put event_id #{event_id}"
+    logger.info "params #{data}"
+    response = Action.update_doli data
+    response.to_json
+  end
 
   options '/events' do
     events = Action.ax_find(params, [:je, :jd])    
@@ -49,8 +70,6 @@ class AxAgenda < Sinatra::Base
 # {"id":"","cid":"1","title":"fdkljfdklsjkl","start":,"end":"2014-01-07T01:00:00+01:00","loc":"","notes":"","url":"","ad":false,"rem":"","rrule":"","duration":60,"origid":"","rsstart":"","ristart":"2014-01-07T00:00:00+01:00","redit":""}  
   # startDate=2013-12-29&endDate=2014-02-01&page=1&start=0&limit=25 
   get '/events' do
-    
-
     events = Action.ax_find(params, [:je, :jd])
     logger.info("events size #{events.size}")
     headers "Access-Control-Allow-Origin" => 'http://localhost:9000',

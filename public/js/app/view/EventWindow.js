@@ -41,7 +41,7 @@
  * @constructor
  * @param {Object} config The config object
  */
-Ext.define('Extensible.calendar.form.EventWindow', {
+Ext.define('AxAgenda.view.EventWindow', {
     extend: 'Ext.window.Window',
     alias: 'widget.extensible.eventeditwindow',
     
@@ -168,13 +168,6 @@ Ext.define('Extensible.calendar.form.EventWindow', {
                 handler: this.onSave,
                 scope: this
             },{
-                text: this.deleteButtonText,
-                itemId: this.id + '-delete-btn',
-                disabled: false,
-                handler: this.onDelete,
-                scope: this,
-                hideMode: 'offsets' // IE requires this
-            },{
                 text: this.cancelButtonText,
                 itemId: this.id + '-cancel-btn',
                 disabled: false,
@@ -205,38 +198,61 @@ Ext.define('Extensible.calendar.form.EventWindow', {
         
         this.callParent(arguments);
     },
-    
     getFormItemConfigs: function() {
-        var items = [{
-            xtype: 'textfield',
-            itemId: this.id + '-title',
-            name: Extensible.calendar.data.EventMappings.Title.name,
-            fieldLabel: this.titleLabelText,
-            anchor: '100%'
-        },{
-            xtype: 'extensible.daterangefield',
-            itemId: this.id + '-dates',
-            name: 'dates',
-            anchor: '95%',
-            singleLine: true,
-            startDay: this.startDay,
-            fieldLabel: this.datesLabelText
-        }];
-        
-        if(this.calendarStore) {
-            items.push({
-                xtype: 'extensible.calendarcombo',
-                itemId: this.id + '-calendar',
-                name: Extensible.calendar.data.EventMappings.CalendarId.name,
-                anchor: '100%',
-                fieldLabel: this.calendarLabelText,
-                store: this.calendarStore
-            });
-        }
-        
-        return items;
+	var items = [{
+	    xtype: 'textfield',
+	    itemId: this.id + '-title',
+	    name: Extensible.calendar.data.EventMappings.Title.name,
+	    fieldLabel: this.titleLabelText,
+	    anchor: '100%'
+	},{
+	    xtype: 'extensible.daterangefield',
+	    itemId: this.id + '-dates',
+	    name: 'dates',
+	    anchor: '95%',
+	    singleLine: true,
+	    startDay: this.startDay,
+	    fieldLabel: this.datesLabelText
+	},{
+	    xtype: 'textfield',
+	    itemId: this.id + '-tel',
+	    name: 'ContactPhone',
+	    fieldLabel: 'Tel',
+	    anchor: '100%'
+	},{
+	    xtype: 'textfield',
+	    itemId: this.id + '-telmobile',
+	    name: 'ContactPhoneMobile',
+	    fieldLabel: 'Tel mobile',
+	    anchor: '100%'
+	},{
+	    xtype: 'textfield',
+	    itemId: this.id + '-telperso',
+	    name: 'ContactPhonePerso',
+	    fieldLabel: 'Tel perso',
+	    anchor: '100%'
+	},{
+	    xtype: 'textfield',
+	    itemId: this.id + '-mail',
+	    name: 'ContactMail',
+	    fieldLabel:'Email',
+	    anchor: '100%'
+	}];
+	
+	if(this.calendarStore) {
+	    items.push({
+		xtype: 'extensible.calendarcombo',
+		itemId: this.id + '-calendar',
+		name: Extensible.calendar.data.EventMappings.CalendarId.name,
+		anchor: '100%',
+		fieldLabel: 'Agenda',
+		store: this.calendarStore
+	    });
+	}
+	
+	return items;
     },
-
+    
     // private
     afterRender: function() {
         this.callParent(arguments);
@@ -301,7 +317,7 @@ Ext.define('Extensible.calendar.form.EventWindow', {
         
         // Only show the delete button if the data includes an EventID, otherwise
         // we're adding a new record
-        me.deleteButton[o.data && o.data[EventMappings.EventId.name] ? 'show' : 'hide']();
+        // me.deleteButton[o.data && o.data[EventMappings.EventId.name] ? 'show' : 'hide']();
         
         if (o.data) {
             rec = o;
@@ -487,3 +503,4 @@ Ext.define('Extensible.calendar.form.EventWindow', {
         this.fireEvent('eventdelete', this, this.activeRecord, this.animateTarget);
     }
 });
+    

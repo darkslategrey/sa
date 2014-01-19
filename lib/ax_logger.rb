@@ -17,7 +17,7 @@ module Axagenda
       end
 
       def configure_logger_for(classname)
-        logger = Logger.new(STDOUT)
+        logger = Logger.new('log/app.log')
         logger.progname = classname
         logger.level = Logger::Severity::DEBUG
         logger

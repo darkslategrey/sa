@@ -103,8 +103,19 @@ class Action < Sequel::Model
     action.note  = params['notes']
     action.datep = params['start']
     action.datep2 = params['end']
+    action.contact.phone = params['contact.phone']
+    action.contact.phone_perso = params['contact.phone_perso']
+    action.contact.phone_mobile = params['contact.phone_mobile']
+    action.contact.email = params['contact.email']
 
-    begin 
+
+    self.logger.debug("phone #{params['contact.phone']}")
+    self.logger.debug("phone_mobile #{params['contact.phone_mobile']}")
+    self.logger.debug("phone_perso #{params['contact.phone_perso']}")
+    self.logger.debug("email #{params['contact.email']}")            
+    
+    begin
+      action.contact.save      
       action.save
     rescue Exception => e
       msg = "Erreur mise à jour: #{e}"
@@ -141,6 +152,7 @@ class Action < Sequel::Model
       "end"   => DateTime.parse(datep2.to_s).to_s,
       "notes" => note,
       "owner" => user_todo.rowid,
+      "contact_id" => ax_contact['id'],
       "contact" => ax_contact
     }
   end

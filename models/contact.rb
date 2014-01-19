@@ -12,14 +12,17 @@ class Contact < Sequel::Model
   end
 
   def to_ax
+    phones        = phone.blank? ? 'pas de fixe / ' : "#{phone} / "
+    phones_perso  = phone_perso.blank? ? 'pas de perso / ' : "#{phone_perso} / "
+    phones_mobile = phone_mobile.blank? ? 'pas de mobile' : phone_mobile 
     {
       :id => rowid,
       :civilite => civilite,
       :name => name,
       :firstname => firstname,
       :phone => phone,
-      :phone_perso => phone_perso,
       :phone_mobile => phone_mobile,
+      :phnoe_perso => phone_perso,
       :email => email
     }
   end

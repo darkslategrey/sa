@@ -13,7 +13,10 @@ Ext.define('AxAgenda.controller.Calendars', {
 
     init: function() {
     	this.control({
-	    
+
+	    '#ext-cal-editwin': {
+		beforerender: this.onBeforerenderEventWin
+	    },
     	    '#app-calendar': {
     		viewchange: this.updateTitle,
 		eventclick: this.onEventClick,
@@ -49,6 +52,32 @@ Ext.define('AxAgenda.controller.Calendars', {
 		'select': this.onSelectDatePicker
 	    }
     	});
+    },
+
+    onBeforerenderEventWin: function(elt, opts) {
+	// var editWin = Ext.ComponentQuery.query('#ext-cal-editwin')[0]
+	// var toolbar = elt.getDockedItems('toolbar')[0]
+	// toolbar.remove('ext-cal-editwin-delete-btn', false);	
+
+	// elt.fbar = ['->', {
+        //     xtype: 'tbtext',
+        //     itemId: this.id + '-details-btn',
+        //     text: '<a href="#" class="' + this.editDetailsLinkClass + '">' + this.detailsLinkText + '</a>'
+	// },{
+        //     text: this.saveButtonText,
+        //     itemId: this.id + '-save-btn',
+        //     disabled: false,
+        //     handler: this.onSave,
+        //     scope: this
+	// },{
+        //     text: this.cancelButtonText,
+        //     itemId: this.id + '-cancel-btn',
+        //     disabled: false,
+        //     handler: this.onCancel,
+        //     scope: this
+	// }];
+	
+	console.log("before render edit event");
     },
 
     onUserCheckboxChange: function(elt, newValue, oldValue, eOpts) {
@@ -172,7 +201,7 @@ Ext.define('AxAgenda.controller.Calendars', {
     },
     
     onEventUpdate: function(cp, rec) {
-        this.showMsg('Event '+ rec.data[Extensible.calendar.data.EventMappings.Title.name] +' was updated');	
+        this.showMsg('L\'action '+ rec.data[Extensible.calendar.data.EventMappings.Title.name] +' à été mise à jour');	
     },
     onEventCancel: function(cp, rec) {
 	console.log('event cancel');
@@ -196,7 +225,7 @@ Ext.define('AxAgenda.controller.Calendars', {
     
     onEventResize: function(vw, rec) {
 	rec.commit();
-        this.showMsg('Event '+ rec.data[Extensible.calendar.data.EventMappings.Title.name] +' was updated');	
+        this.showMsg('L\'action '+ rec.data[Extensible.calendar.data.EventMappings.Title.name] +' à été mise à jour');	
     },
     onEventDelete: function(win, rec) {
 	this.eventsStore.remove(rec);
