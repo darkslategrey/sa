@@ -378,7 +378,7 @@ Ext.define('AxAgenda.view.EventWindow', {
         if (EventMappings.RInstanceStartDate) {
             rec.data[EventMappings.RInstanceStartDate.name] = rec.getStartDate();
         }
-        
+
         me.dateRangeField.setValue(rec.data);
         me.activeRecord = rec;
         

@@ -4,13 +4,11 @@
 Ext.define('AxAgenda.store.Calendars', {
     extend: 'Ext.data.Store',
     model: 'Extensible.calendar.data.CalendarModel',    
-    // model: 'AxAgenda.model.Calendar',
 
     requires: [
         'Ext.data.reader.Json',
         'Ext.data.writer.Json',
 	'Extensible.calendar.data.CalendarModel',	
-        // 'AxAgenda.model.Calendar',
         'Extensible.calendar.data.CalendarMappings'
     ],
 
