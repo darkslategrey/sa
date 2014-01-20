@@ -105,6 +105,19 @@ Ext.define('AxAgenda.view.EventWindow', {
     
     // private
     initComponent: function() {
+        this.width =  650;
+        this.labelWidth =  65;
+        this.titleTextAdd =  'Ajouter évènement';
+        this.titleTextEdit =  'Editer évènement';
+        this.savingMessage =  'Sauvegarde des changements...';
+        this.deletingMessage =  'Suppression de l\'évènement...';
+        this.detailsLinkText =  'Détail de l\'événement...';
+        this.saveButtonText =  'Enregistrer';
+        this.deleteButtonText =  'Supprimer';
+        this.cancelButtonText =  'Annuler';
+        this.titleLabelText =  'Titre';
+        this.datesLabelText =  'Quand';
+        this.calendarLabelText =  'Agenda';
         this.addEvents({
             /**
              * @event eventadd

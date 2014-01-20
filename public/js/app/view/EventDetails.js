@@ -76,7 +76,24 @@ Ext.define('AxAgenda.view.EventDetails', {
     
     // private
     initComponent: function() {
-        
+	this.labelWidth = 55;
+	this.labelWidthRightCol = 80;
+	this.title = 'Formulaire évènement';
+	this.titleTextAdd = 'Ajouter évènement';
+	this.titleTextEdit = 'Editer évènement';
+	this.titleLabelText = 'Titre';
+	this.saveButtonText = 'Enregistrer';
+	this.deleteButtonText = 'Supprimer';
+	this.cancelButtonText = 'Annuler';
+	this.titleLabelText = 'Titre';
+	this.datesLabelText = 'Quand';
+	this.reminderLabelText = 'Rappel';
+	this.notesLabelText = 'Notes';
+	this.locationLabelText = 'Lieu';
+	this.webLinkLabelText = 'Lien internet';
+	this.calendarLabelText = 'Agenda';
+	this.repeatsLabelText = 'Répéter';
+
         this.addEvents({
             /**
              * @event eventadd

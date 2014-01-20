@@ -68,6 +68,8 @@ Ext.define('AxAgenda.view.DateRange', {
     // private
     initComponent: function() {
         var me = this;
+	this.toText = 'au';
+        this.dateFormat = 'd/m/Y';
         /**
          * @cfg {String} timeFormat
          * The time display format used by the time fields. By default the DateRange uses the
