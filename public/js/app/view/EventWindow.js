@@ -49,7 +49,8 @@ Ext.define('AxAgenda.view.EventWindow', {
         'Ext.form.Panel',
         'Extensible.calendar.data.EventModel',
         'Extensible.calendar.data.EventMappings',
-        'Extensible.form.recurrence.RangeEditWindow'
+        'Extensible.form.recurrence.RangeEditWindow',
+	'AxAgenda.view.DateRange'
     ],
     
     // Locale configs
@@ -206,13 +207,22 @@ Ext.define('AxAgenda.view.EventWindow', {
 	    fieldLabel: this.titleLabelText,
 	    anchor: '100%'
 	},{
-	    xtype: 'extensible.daterangefield',
+	    xtype: 'axagenda.daterangefield',
 	    itemId: this.id + '-dates',
 	    name: 'dates',
 	    anchor: '95%',
 	    singleLine: true,
 	    startDay: this.startDay,
 	    fieldLabel: this.datesLabelText
+	},{
+            xtype: 'checkbox',
+            id: this.id + '-finished-task',
+	    name: 'IsFinished',
+	    inputValue: 'true',
+            boxLabel: 'Tâche terminée',
+            margins: { top: 2, right: 5, bottom: 0, left: 0 },
+            // handler: this.onAllDayChange,
+            // scope: this
 	},{
 	    xtype: 'textfield',
 	    itemId: this.id + '-tel',
@@ -237,7 +247,7 @@ Ext.define('AxAgenda.view.EventWindow', {
 	    name: 'ContactMail',
 	    fieldLabel:'Email',
 	    anchor: '100%'
-	}];
+	}];		
 	
 	if(this.calendarStore) {
 	    items.push({
@@ -288,6 +298,7 @@ Ext.define('AxAgenda.view.EventWindow', {
     // private
     onEditDetailsClick: function(e) {
         e.stopEvent();
+	console.log("click details");
         this.updateRecord(this.activeRecord, true);
         this.fireEvent('editdetails', this, this.activeRecord, this.animateTarget);
     },
@@ -433,7 +444,7 @@ Ext.define('AxAgenda.view.EventWindow', {
 
         record.beginEdit();
         record.set(obj);
-        
+
         if (!keepEditing || !modified) {
             record.endEdit();
         }
@@ -448,14 +459,17 @@ Ext.define('AxAgenda.view.EventWindow', {
             originalHasRecurrence = me.activeRecord.isRecurring();
         
         if (!form.isDirty() && !me.allowDefaultAdd) {
+	    console.log('!dirty');
             me.onCancel();
             return;
         }
         if (!form.isValid()) {
+	    console.log('!isvalid');	    
             return;
         }
         
         if (!me.updateRecord(me.activeRecord)) {
+	    console.log('!updaterecord');	    	    
             me.onCancel();
             return;
         }

@@ -166,6 +166,7 @@ Ext.application({
 
 	Ext.override(Extensible.calendar.view.AbstractCalendar, {
 
+	    
 	    // private
 	    getEventEditor: function() {
 		// only create one instance of the edit window, even if there are multiple CalendarPanels
@@ -220,6 +221,7 @@ Ext.application({
 			    }
 			}
 		    });
+		    // this.editWin.remove('ext-cal-editwin-delete-btn', true);
 		}
 
 		// allows the window to reference the current scope in its callbacks
@@ -289,6 +291,7 @@ Ext.application({
             Notes:       {name: 'Notes', mapping: 'notes'},
             Url:         {name: 'Url', mapping: 'url'},
             IsAllDay:    {name: 'IsAllDay', mapping: 'all_day', type: 'boolean'},
+	    IsFinished:  {name: 'IsFinished', mapping: 'is_finished', type: 'boolean'},
             Reminder:    {name: 'Reminder', mapping: 'reminder'},
 	    Owner:       {name: 'Owner',    mapping: 'owner'},
 	    Contact:     {name: 'Contact',  mapping: 'contact'},

@@ -41,7 +41,7 @@ class Action < Sequel::Model
     endDate   = DateTime.parse params['endDate']    
     endDate   = endDate == startDate ? startDate + 1.day : endDate
     actions = srvs.map do |srv|
-      reorder self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}' and ax_agenda_id != 0").order(:datep, :datec).all
+      reorder self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}' and ax_agenda_id != 0 and percent != 100").order(:datep, :datec).all
     end
     actions.flatten.map do |action|
       action.to_ax
@@ -107,7 +107,7 @@ class Action < Sequel::Model
     action.contact.phone_perso = params['contact.phone_perso']
     action.contact.phone_mobile = params['contact.phone_mobile']
     action.contact.email = params['contact.email']
-
+    action.percent = 100 if params['is_finished']
 
     self.logger.debug("phone #{params['contact.phone']}")
     self.logger.debug("phone_mobile #{params['contact.phone_mobile']}")
@@ -153,7 +153,8 @@ class Action < Sequel::Model
       "notes" => note,
       "owner" => user_todo.rowid,
       "contact_id" => ax_contact['id'],
-      "contact" => ax_contact
+      "contact" => ax_contact,
+      "is_finished" => false,      
     }
   end
 end

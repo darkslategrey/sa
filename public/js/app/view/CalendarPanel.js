@@ -4,16 +4,33 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     alias: 'widget.axagenda.calendarpanel',
     id: 'app-calendar',
 
+    requires: ['AxAgenda.view.EventDetails'],
+    
     initComponent: function() {
 	var me = this;
 
 	// Ext.override(Extensible.calendar.view.AbstractCalendar, {
 	me.callParent(arguments);
+
+	this.remove('app-calendar-edit');
+	this.add({
+            xtype: 'axagenda.eventeditform',
+            id: this.id+'-edit',
+            calendarStore: this.calendarStore,
+            recurrence: this.recurrence,
+            startDay: this.startDay,
+            listeners: {
+                'eventadd':    { scope: this, fn: this.onEventAdd },
+                'eventupdate': { scope: this, fn: this.onEventUpdate },
+                'eventdelete': { scope: this, fn: this.onEventDelete },
+                'eventcancel': { scope: this, fn: this.onEventCancel }
+            }
+	});
     },
     // requires: [
     // 	'Extensible.calendar.CalendarPanel', 'AxAgenda.store.Events', 'AxAgenda.store.Calendars'
     // ],
-    
+
     activeItem: 3, // month view
     startDay: 0, // The 0-based index for the day on which the calendar week begins (0=Sunday)
     

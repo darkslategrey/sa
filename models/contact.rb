@@ -22,7 +22,7 @@ class Contact < Sequel::Model
       :firstname => firstname,
       :phone => phone,
       :phone_mobile => phone_mobile,
-      :phnoe_perso => phone_perso,
+      :phone_perso => phone_perso,
       :email => email
     }
   end
