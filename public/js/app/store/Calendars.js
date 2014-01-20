@@ -3,27 +3,27 @@
 
 Ext.define('AxAgenda.store.Calendars', {
     extend: 'Ext.data.Store',
-    model: 'AxAgenda.model.Calendar',
+    model: 'Extensible.calendar.data.CalendarModel',    
+    // model: 'AxAgenda.model.Calendar',
 
     requires: [
         'Ext.data.reader.Json',
         'Ext.data.writer.Json',
-        'AxAgenda.model.Calendar',
+	'Extensible.calendar.data.CalendarModel',	
+        // 'AxAgenda.model.Calendar',
         'Extensible.calendar.data.CalendarMappings'
     ],
-    
-    autoLoad: true,
 
-
-    proxy: {
-	type: 'rest',
-	url: '/calendars',
-        reader: {
-            type: 'json',
-            root: 'calendars'
-        },
-        writer: {
-            type: 'json'
-        }
+    initComponent: function() {
+        this.sorters = this.sorters || [{
+            property: Extensible.calendar.data.CalendarMappings.Title.name,
+            direction: 'ASC'
+        }];
+        
+        this.idProperty = this.idProperty || Extensible.calendar.data.CalendarMappings.CalendarId.name || 'id';
+        
+        this.fields = Extensible.calendar.data.CalendarModel.prototype.fields.getRange();
+        
+        this.callParent(arguments);
     }
 });

@@ -314,18 +314,20 @@ Ext.application({
 	    fields: Extensible.calendar.data.CalendarModel.prototype.fields.getRange()
 	});
 	
-	var calendarStore = Ext.create('AxAgenda.store.Calendars', {
+	var calendarStore = Ext.create('AxAgenda.store.Calendars', { 
             autoLoad: true,
             proxy: {
-		type: 'ajax',
+		type: 'rest',
 		url: '/calendars', // SUBSTITUTE FOR DEPLOY		
 		noCache: false,
-		
-		reader: reader
-		// {
-                //     type: 'json',
-                //     root: 'calendars'
-		// }
+		reader: {
+                    type: 'json',
+                    root: 'calendars'
+		},
+		writer: {
+                    type: 'json',
+                    nameProperty: 'mapping'
+		}
             }
 	});
 

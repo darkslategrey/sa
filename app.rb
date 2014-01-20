@@ -97,8 +97,8 @@ class AxAgenda < Sinatra::Base
   end
 
   # not yet
-  post '/calendars' do
-  end
+  # post '/calendars' do
+  # end
 end
 
 
