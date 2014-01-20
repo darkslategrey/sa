@@ -11,7 +11,7 @@ class Calendar < Sequel::Model
                :join_table => :user_axagendas
   
   def as_ax
-    { :id => id, :title => title, :color => color }
+    { :id => id, :title => title, :color => color, :desc => '', :hidden => false }
   end
 end
 
