@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'mina/bundler'
 require 'mina/git'
 require 'mina/rvm'
