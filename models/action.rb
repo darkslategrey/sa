@@ -45,7 +45,9 @@ class Action < Sequel::Model
     # Attention ici sur le ^Société !! Risque de ne pas voir l'action
     labelcond = "label not regexp '^Bon de commande|^Facture FA|^Facture AV|^Proposition valid|^Société'"
     usercond  = "fk_user_action IS NOT NULL"
-    condition = "datep >= '#{startDate}' and datep2 < '#{endDate}' and #{usercond} and #{labelcond} and percent != 100"
+    # labelcond = "label != 
+    datecond  = "((datep >= '#{startDate}' and datep2 < '#{endDate}') OR (datep >= '#{startDate}' and datep2 IS NULL))"
+    condition = "#{datecond} and #{usercond} and #{labelcond} and percent != 100"
     Action.logger.info "condition #{condition}"
 
     actions = []
@@ -74,10 +76,10 @@ class Action < Sequel::Model
       ordered_actions["#{d}-#{m}-#{y}"] = sorted_actions
     end
 
-    interval = 10
+    interval = 5
     converted_actions = []
     ordered_actions.each_pair do |date, actions|
-      hour, min = 9, 0
+      hour, min = 1, 0
       d, m, y   = date.split '-'
       nd = DateTime.new(y.to_i, m.to_i, d.to_i, hour, min, 0, '+1')
       actions[:fullday].each do |action|
@@ -109,7 +111,7 @@ class Action < Sequel::Model
     msg = ''
     success = false
     action = Action.server(params['cname'].to_sym).where(:id => params['id']).first
-    action.label = params['title']
+    action.label = params['subject']
     action.note  = params['notes']
     action.datep = params['start']
     action.datep2 = params['end']
@@ -152,7 +154,8 @@ class Action < Sequel::Model
 
   def to_ax
     environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
-    title = environment == 'development' ? "#{id} / " : ''
+    # title = environment == 'development' ? "#{id} / " : ''
+    title = "#{id} / "
     title += societe.nil? ? label : societe.nom
     title += ' - '
     title += contact.nil? ? "Pas de contact" : "#{contact.civilite} #{contact.name}"
@@ -174,6 +177,7 @@ class Action < Sequel::Model
     ax_contact = contact.nil? ? nil : contact.to_ax
     {
       "id"    => id,
+      "subject" => label,
       "cid"   => calendar.id,
       "cname" => shortname,
       "title" => title,
