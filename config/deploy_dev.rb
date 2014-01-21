@@ -56,6 +56,11 @@ task :deploy => :environment do
   end
 end
 
+desc "Create dev dbs"
+task :create_dev_db => :environment do
+  queue! "#{rake} db:setup_dev"
+end
+
 desc "Setup the dev env"
 task :setup_dev => :environment do
   deploy do

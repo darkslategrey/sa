@@ -7,7 +7,7 @@ environment = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
 puts "Prepare env #{environment}"    
 $axdbconf   = YAML.load_file 'config/database.yml'
 $conf_env = $axdbconf[environment]
-
+$conf_dev = $axdbconf['development']
 
 namespace :db do
   task :environment do
@@ -41,13 +41,15 @@ namespace :db do
     puts "setup dev db START"    
     puts "\tcreate dev dbs START"
     %w/je jd master/.each do |db|
-      dev_adapter  = $conf_env[db]['adapter']
-      dev_port     = $conf_env[db]['port']
-      dev_host     = $conf_env[db]['host']            
-      dev_username = $conf_env[db]['username']
-      dev_pass     = $conf_env[db]['password']
-      dev_db_name  = $conf_env[db]['database']
+      dev_adapter  = $conf_dev[db]['adapter']
+      dev_port     = $conf_dev[db]['port']
+      dev_host     = $conf_dev[db]['host']            
+      dev_username = $conf_dev[db]['username']
+      dev_pass     = $conf_dev[db]['password']
+      dev_db_name  = $conf_dev[db]['database']
       prod_db_name = $axdbconf['production'][db]['database']
+      prod_username= $axdbconf['production'][db]['username']
+      prod_pass    = $axdbconf['production'][db]['password']      
 
       puts "\t\tdrop dev #{db} #{dev_db_name}"
       %x/mysqladmin -u #{dev_username} -p#{dev_pass} -f drop #{dev_db_name}/ 
@@ -56,14 +58,14 @@ namespace :db do
       %x/mysqladmin -u #{dev_username} -p#{dev_pass} create #{dev_db_name}/
       
       puts "\t\tdump #{prod_db_name} #{dev_db_name}"
-      %x[mysqldump -u #{dev_username} -p#{dev_pass} #{prod_db_name} > db/prod_#{db}.dump.sql]
+      %x[mysqldump -u #{prod_username} -p#{prod_pass} #{prod_db_name} > db/prod_#{db}.dump.sql]
       
       puts "\t\tload prod db into dev #{db} #{dev_db_name}"
       %x[cat db/prod_#{db}.dump.sql | mysql -u #{dev_username} -p#{dev_pass} #{dev_db_name}]
 
     end
     puts "\t\tload dev seed data START"
-    %x[ruby db/seed_dev.rb]
+    # %x[ruby db/seed_dev.rb]
     puts "\t\tload dev seed data END"      
     puts "\tcreate dev dbs END"
     puts "setup dev db END"
