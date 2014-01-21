@@ -162,6 +162,7 @@ Ext.application({
             CalendarId:  {name: 'CalendarId', mapping: 'cid', type: 'string'},
             CalendarName:{name: 'CalendarName', mapping: 'cname', type: 'string'},	    
             Title:       {name: 'Title', mapping: 'title'},
+	    Subject:     {name: 'Subject', mapping: 'subject'},
             StartDate:   {name: 'Start', mapping: 'start', type: 'date', dateFormat: 'c'},
             EndDate:     {name: 'End', mapping: 'end', type: 'date', dateFormat: 'c'},
             Location:    {name: 'Location', mapping: 'location'},
