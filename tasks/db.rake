@@ -121,6 +121,32 @@ namespace :db do
     puts "Set ids END" 
   end
 
+  desc "Set actioncomm to ax_agenda"
+  task :set_agenda => :environment do
+    puts "Set ax_agenda_id for je actioncomm START"
+    DB.with_server(:je) do
+      DB['update llx_actioncomm set ax_agenda_id = 1'].update;
+    end
+    puts "Set ax_agenda_id for je actioncomm END"    
+    puts "Set ax_agenda_id for jd actioncomm START"    
+    DB.with_server(:jd) do
+      DB['update llx_actioncomm set ax_agenda_id = 2'].update;
+    end
+    puts "Set ax_agenda_id for jd actioncomm END"        
+  end
+
+  desc "Set actioncomm to user_action 1"
+  task :set_user_action => :environment do
+    [:je, :jd].each do |db|
+      puts "Set user_action to 1 for #{db} START"
+      DB.with_server(db) do
+        DB['update llx_actioncomm set fk_user_action = 1 where fk_user_action IS NULL'].update
+      end
+      puts "Set user_action to 1 for #{db} END"      
+    end
+  end
+
+  
   desc "Attach users to axagenda"
   task :attach_user => :environment do
     puts "Attach user START"
