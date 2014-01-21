@@ -152,7 +152,7 @@ Ext.application({
 	    Title:        {name:'Title', mapping: 'title', type: 'string'},
 	    Description:  {name:'Description', mapping: 'desc', type: 'string'},
 	    ColorId:      {name:'ColorId', mapping: 'color', type: 'int'},
-	    IsHidden:     {name:'IsHidden', mapping: 'hidden', type: 'boolean'},
+	    IsHidden:     {name:'IsHidden', mapping: 'hidden', type: 'boolean'}
 	};
 	Extensible.calendar.data.CalendarModel.reconfigure();
 	
