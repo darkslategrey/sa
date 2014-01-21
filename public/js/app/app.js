@@ -171,11 +171,10 @@ Ext.application({
 	    IsFinished:  {name: 'IsFinished', mapping: 'is_finished', type: 'boolean'},
             Reminder:    {name: 'Reminder', mapping: 'reminder'},
 	    Owner:       {name: 'Owner',    mapping: 'owner'},
-	    Contact:     {name: 'Contact',  mapping: 'contact'},
-	    ContactMail:  {name: 'ContactMail', mapping: 'contact.email'},
-	    ContactPhone:       {name: 'ContactPhone',  mapping: 'contact.phone'},
-	    ContactPhonePerso:  {name: 'ContactPhonePerso',  mapping: 'contact.phone_perso'},
-	    ContactPhoneMobile:  {name: 'ContactPhoneMobile',  mapping: 'contact.phone_mobile'}	    	    
+	    ContactMail:  {name: 'ContactMail', mapping: 'contact_email'},
+	    ContactPhone:       {name: 'ContactPhone',  mapping: 'contact_phone'},
+	    ContactPhonePerso:  {name: 'ContactPhonePerso',  mapping: 'contact_phone_perso'},
+	    ContactPhoneMobile:  {name: 'ContactPhoneMobile',  mapping: 'contact_phone_mobile'}	    	    
 
 	};
 	Extensible.calendar.data.EventModel.reconfigure();
