@@ -38,7 +38,7 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     viewConfig: {
         //enableFx: false,
         ddIncrement: 10, //only applies to DayView and subclasses, but convenient to put it here
-        viewStartHour: 8,
+        viewStartHour: 1,
         // viewEndHour: 18,
         minEventDisplayMinutes: 5,
         showTime: true
@@ -48,9 +48,9 @@ Ext.define('AxAgenda.view.CalendarPanel', {
         ddIncrement: 10, //only applies to DayView and subclasses, but convenient to put it here
         // viewStartHour: 6,
         // viewEndHour: 18,
-        minEventDisplayMinutes: 5,
+        minEventDisplayMinutes: 1,
         showTime: true,
-	hourHeight: 100
+	hourHeight: 700
     },
     
     // View options specific to a certain view (if the same options exist in viewConfig
@@ -62,7 +62,7 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     },
 
     weekViewCfg: {
-	hourHeight: 100	
+	hourHeight: 700	
     },
     
     multiWeekViewCfg: {
