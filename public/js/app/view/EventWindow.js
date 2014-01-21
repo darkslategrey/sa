@@ -238,6 +238,12 @@ Ext.define('AxAgenda.view.EventWindow', {
             // scope: this
 	},{
 	    xtype: 'textfield',
+	    itemId: this.id + '-subject',
+	    name: 'Subject',
+	    fieldLabel: 'Sujet',
+	    anchor: '100%'
+	},{
+	    xtype: 'textfield',
 	    itemId: this.id + '-tel',
 	    name: 'ContactPhone',
 	    fieldLabel: 'Tel',

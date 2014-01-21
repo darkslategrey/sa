@@ -165,6 +165,12 @@ Ext.define('AxAgenda.view.EventDetails', {
             // handler: this.onAllDayChange,
             // scope: this
 	});
+	this.subjectField = Ext.create('Ext.form.field.Text', {
+	    itemId: this.id + '-subject',
+	    name: 'Subject',
+	    fieldLabel: 'Sujet',
+	    anchor: this.fieldAnchor
+	});
 	this.telField = Ext.create('Ext.form.field.Text', {
 	    itemId: this.id + '-tel',
 	    name: 'ContactPhone',
@@ -207,7 +213,7 @@ Ext.define('AxAgenda.view.EventDetails', {
             
         var rightFields = [],
             leftFields  = [this.titleField, this.dateRangeField, this.reminderField,
-			   this.finishedField,
+			   this.finishedField, this.subjectField,
                            this.notesField, this.telField, this.telMobileField,
 			   this.telPersoField, this.emailField, this.locationField,
 			   this.urlField];
