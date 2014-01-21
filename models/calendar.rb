@@ -5,6 +5,8 @@ class Calendar < Sequel::Model
   set_dataset :ax_agendas
   unrestrict_primary_key
 
+  # set_allowed_columns :shortname, :color
+  
   one_to_many :actions, :key => :ax_agenda_id
 
   many_to_many :users, :right_key => :fk_user, :left_key => :ax_agenda_id,
