@@ -9,6 +9,8 @@ class Action < Sequel::Model
   
   set_dataset :llx_actioncomm
 
+  set_allowed_columns :calendar, :datep, :datep2
+  
   many_to_one :calendar, :key => :ax_agenda_id
   many_to_one :type,     :key => :fk_action
 
@@ -40,13 +42,19 @@ class Action < Sequel::Model
     startDate = DateTime.parse params['startDate']
     endDate   = DateTime.parse params['endDate']    
     endDate   = endDate == startDate ? startDate + 1.day : endDate
-    actions = srvs.map do |srv|
-      reorder self.server(srv).where("datep >= '#{startDate}' and datep2 < '#{endDate}' and ax_agenda_id != 0 and percent != 100").order(:datep, :datec).all
+    # Attention ici sur le ^Société !! Risque de ne pas voir l'action
+    labelcond = "label not regexp '^Bon de commande|^Facture FA|^Facture AV|^Proposition valid|^Société'"
+    usercond  = "fk_user_action IS NOT NULL"
+    condition = "datep >= '#{startDate}' and datep2 < '#{endDate}' and #{usercond} and #{labelcond} and percent != 100"
+    Action.logger.info "condition #{condition}"
+
+    actions = []
+    srvs.each do |srv|
+      actions += self.server(srv).where(condition).order(:datep, :datec).all
     end
-    actions.flatten.map do |action|
-      action.to_ax
-    end
-  end
+    actions = reorder actions.flatten
+    actions = actions.map do |action| action.to_ax end
+  end    
 
   # Les actions doli toute la journée sont convertis en events AX
   # Ces actions s'ordonnent à  1/2 d'interval pour apparaître dans
@@ -57,14 +65,16 @@ class Action < Sequel::Model
       datep, datep2  = action.datep, action.datep2
       d, m, y        = datep.day, datep.month, datep.year
       sorted_actions = ordered_actions["#{d}-#{m}-#{y}"] || {:fullday => [], :rdv => []} 
-      if action.is_fullday
+      if action.is_fullday # test le tout dans fullday 
         sorted_actions[:fullday] << action
       else
-        sorted_actions[:rdv] << action
+        sorted_actions[:fullday] << action        
+        # sorted_actions[:rdv] << action
       end
       ordered_actions["#{d}-#{m}-#{y}"] = sorted_actions
     end
 
+    interval = 10
     converted_actions = []
     ordered_actions.each_pair do |date, actions|
       hour, min = 9, 0
@@ -72,11 +82,11 @@ class Action < Sequel::Model
       nd = DateTime.new(y.to_i, m.to_i, d.to_i, hour, min, 0, '+1')
       actions[:fullday].each do |action|
         action.datep  = nd
-        action.datep2 = nd + 30.minute
-        nd += 30.minute
+        action.datep2 = nd + interval.minute
+        nd += interval.minute
         converted_actions << action
       end
-      converted_actions += actions[:rdv]
+      # converted_actions += actions[:rdv]
     end
     converted_actions
   end
@@ -103,19 +113,24 @@ class Action < Sequel::Model
     action.note  = params['notes']
     action.datep = params['start']
     action.datep2 = params['end']
-    action.contact.phone = params['contact.phone']
-    action.contact.phone_perso = params['contact.phone_perso']
-    action.contact.phone_mobile = params['contact.phone_mobile']
-    action.contact.email = params['contact.email']
+
+    if not action.contact.nil?
+      action.contact.phone = params['contact_phone']
+      action.contact.phone_perso = params['contact_phone_perso']
+      action.contact.phone_mobile = params['contact_phone_mobile']
+      action.contact.email = params['contact_email']
+
+      begin
+        action.contact.save
+      rescue Exception => e
+        self.logger.error "Update Error: #{e}"
+      end
+      
+    end
+
     action.percent = 100 if params['is_finished']
 
-    self.logger.debug("phone #{params['contact.phone']}")
-    self.logger.debug("phone_mobile #{params['contact.phone_mobile']}")
-    self.logger.debug("phone_perso #{params['contact.phone_perso']}")
-    self.logger.debug("email #{params['contact.email']}")            
-    
     begin
-      action.contact.save      
       action.save
     rescue Exception => e
       msg = "Erreur mise à jour: #{e}"
@@ -140,21 +155,37 @@ class Action < Sequel::Model
     title = environment == 'development' ? "#{id} / " : ''
     title += societe.nil? ? label : societe.nom
     title += ' - '
-    title += contact.nil? ? {} : "#{contact}"
+    title += contact.nil? ? "Pas de contact" : "#{contact.civilite} #{contact.name}"
+
+    Action.logger.info "to ax pour #{id} calendar #{calendar}"
+    Action.logger.info "calendar id #{calendar.id}"
+
+
+    shortname = calendar.name =~ /Jobenfance/ ? 'je' : 'jd'
+
+    contact_email = contact_phone = contact_phone_perso = contact_phone_mobile = ''
+    if not contact.nil?
+      contact_email = contact.email
+      contact_phone = contact.phone
+      contact_phone_perso = contact.phone_perso
+      contact_phone_mobile = contact.phone_mobile
+    end
 
     ax_contact = contact.nil? ? nil : contact.to_ax
     {
       "id"    => id,
       "cid"   => calendar.id,
-      "cname" => calendar.shortname,
+      "cname" => shortname,
       "title" => title,
       "start" => DateTime.parse(datep.to_s).to_s,
       "end"   => DateTime.parse(datep2.to_s).to_s,
       "notes" => note,
       "owner" => user_todo.rowid,
-      "contact_id" => ax_contact['id'],
-      "contact" => ax_contact,
-      "is_finished" => false,      
+      "contact_email"        => contact_email,
+      "contact_phone"        => contact_phone,
+      "contact_phone_perso"  => contact_phone_perso,
+      "contact_phone_mobile" => contact_phone_mobile,
+      "is_finished" => false
     }
   end
 end
