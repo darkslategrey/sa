@@ -31,7 +31,7 @@ Ext.define('AxAgenda.view.CalendarPanel', {
     // 	'Extensible.calendar.CalendarPanel', 'AxAgenda.store.Events', 'AxAgenda.store.Calendars'
     // ],
 
-    activeItem: 2, // month view
+    activeItem: 1, // month view
     startDay: 0, // The 0-based index for the day on which the calendar week begins (0=Sunday)
     
     // Any generic view options that should be applied to all sub views:
