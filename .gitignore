@@ -1,3 +1,7 @@
 tmp
 db/*dump*
+db/*log
+log/*
+*.orig
+
 
