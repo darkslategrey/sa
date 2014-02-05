@@ -159,7 +159,7 @@ Ext.application({
 	
 	Extensible.calendar.data.EventMappings = {
             EventId:     {name: 'EventId', mapping:'id', type:'string'},
-            CalendarId:  {name: 'CalendarId', mapping: 'cid', type: 'string'},
+            CalendarId:  {name: 'CalendarId', mapping: 'cid', type: 'int'},
             CalendarName:{name: 'CalendarName', mapping: 'cname', type: 'string'},	    
             Title:       {name: 'Title', mapping: 'title'},
 	    Subject:     {name: 'Subject', mapping: 'subject'},
