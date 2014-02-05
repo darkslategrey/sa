@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # coding: utf-8
 $:.unshift File.dirname(__FILE__) + "/../lib"
 
@@ -77,17 +79,36 @@ class Action < Sequel::Model
     converted_actions
   end
 
+
+  def self.delete_from_doli action_id, params
+    success = false
+    begin 
+      Action.server(params['cname'].to_sym).where(:id => action_id).delete
+    rescue Exception => e
+      msg = "Erreur suppression action ##{action_id}"
+    else
+      msg = "Action ##{action_id} supprimée"
+      success = true
+    end
+    logger.info "delete action #{action_id} msg #{msg} success #{success}"
+    { :msg => msg, :success => success }
+  end
+
+
   def self.update_doli params
-    self.logger.debug("Start update <#{params['cname']}> <#{params}>")
+    logger.info("Start update <#{params['cname']}> <#{params}>")
     msg = ''
     success = false
     action = Action.server(params['cname'].to_sym).where(:id => params['id']).first
+    logger.info "update_doli action #{action}"
     action.label = params['subject']
     action.note  = params['notes']
     action.datep = params['start']
     action.datep2 = params['end']
+    logger.info "action #{action}"
 
     if not action.contact.nil?
+      logger.info "action maj contact"
       action.contact.phone        = params['contact_phone']
       action.contact.phone_perso  = params['contact_phone_perso']
       action.contact.phone_mobile = params['contact_phone_mobile']
@@ -97,20 +118,24 @@ class Action < Sequel::Model
       rescue Exception => e
         self.logger.error "Update Error: #{e}"
       end
-      
     end
 
     action.percent = 100 if params['is_finished']
 
     begin
+      logger.info "action save start"
       action.save
+      logger.info "action save end"
     rescue Exception => e
       msg = "Erreur mise à jour: #{e}"
+      logge.info "error #{msg}"
       success = false
     else
       msg = "Action mise à jour"
+      logger.info "Action maj ok"
       success = true
     end
+    logger.info "fin maj msg #{msg} success #{success}"
     { :msg => msg, :success => success }
   end
 

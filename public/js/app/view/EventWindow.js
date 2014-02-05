@@ -182,6 +182,13 @@ Ext.define('AxAgenda.view.EventWindow', {
                 handler: this.onSave,
                 scope: this
             },{
+                text: this.deleteButtonText,
+                itemId: this.id + '-delete-btn',
+                disabled: false,
+                handler: this.onDelete,
+                scope: this,
+                hideMode: 'offsets' // IE requires this
+            },{
                 text: this.cancelButtonText,
                 itemId: this.id + '-cancel-btn',
                 disabled: false,
@@ -353,7 +360,7 @@ Ext.define('AxAgenda.view.EventWindow', {
         
         // Only show the delete button if the data includes an EventID, otherwise
         // we're adding a new record
-        // me.deleteButton[o.data && o.data[EventMappings.EventId.name] ? 'show' : 'hide']();
+        me.deleteButton[o.data && o.data[EventMappings.EventId.name] ? 'show' : 'hide']();
         
         if (o.data) {
             rec = o;
@@ -425,7 +432,7 @@ Ext.define('AxAgenda.view.EventWindow', {
         
         if (hide===true) {
             // Work around the CSS day cell height hack needed for initial render in IE8/strict:
-            //var anim = afterDelete || (Ext.isIE8 && Ext.isStrict) ? null : this.animateTarget;
+            // var anim = afterDelete || (Ext.isIE8 && Ext.isStrict) ? null : this.animateTarget;
             this.hide();
         }
     },

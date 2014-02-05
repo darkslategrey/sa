@@ -23,7 +23,7 @@ Dir['models/*.rb'].map do |m| require "./#{m}" end
 class AxAgenda < Sinatra::Base
 
   configure do
-    enable :logging, :dump_errors, :raise_errors, :show_exceptions
+    enable :logging # , :dump_errors, :raise_errors, :show_exceptions
     # logger = Logger.new 'log/app.log'
     logger = Logger.new 'log/app.log'    
     # logger.level = Logger::Severity::DEBUG
@@ -52,11 +52,21 @@ class AxAgenda < Sinatra::Base
 
 
   put '/events/:id' do |event_id|
+    logger.info "put event_id #{event_id}"
     request.body.rewind  
     data = JSON.parse request.body.read
-    logger.info "put event_id #{event_id}"
     logger.info "params #{data}"
     response = Action.update_doli data
+    response.to_json
+  end
+
+  delete '/events/:id' do |event_id|
+    logger.info "delete event_id #{event_id}"
+    request.body.rewind  
+    data = JSON.parse request.body.read
+    logger.info "params #{data}"
+    response = Action.delete_from_doli event_id, data
+    logger.info "response #{response}"
     response.to_json
   end
 
